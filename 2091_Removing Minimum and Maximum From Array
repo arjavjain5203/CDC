@@ -1,0 +1,90 @@
+/*
+🔹 Approach:
+
+The goal is to remove both the minimum and maximum elements from the array using the smallest
+number of deletions. In one deletion, you can only remove an element from either the front or
+the back of the array.
+
+Steps:
+1. Find the indices of the minimum and maximum elements.
+2. Consider three possible ways to remove both:
+   
+   ✅ 1. Remove both from the front:
+      -> max(mini, maxi) + 1
+
+   ✅ 2. Remove both from the back:
+      -> size - min(mini, maxi)
+
+   ✅ 3. Remove one from the front and one from the back:
+      -> For each index:
+           If index <= size/2 → delete from front (index + 1 steps)
+           Else → delete from back (size - index steps)
+      -> Total = t1 + t2
+
+3. Return the minimum among the three computed values.
+
+🔹 Time Complexity:
+O(n)  
+(We traverse the array once to find the min and max indices)
+
+🔹 Space Complexity:
+O(1)  
+(Only a few extra integer variables used)
+
+✅ Example:
+Input: nums = [2,10,7,5,4,1,8,6]
+min = 1 at index 5
+max = 10 at index 1
+
+front = max(5,1) + 1 = 6
+back = size - min(5,1) = 8 - 1 = 7
+middle:
+   t1 (min) = size - 5 = 3
+   t2 (max) = 1 + 1 = 2
+   middle = 3 + 2 = 5
+
+Answer = 5
+
+*/
+
+class Solution {
+public:
+    int minimumDeletions(vector<int>& nums) {
+        int size = nums.size();
+
+        // Find the indices of the minimum and maximum elements
+        int mini = 0, maxi = 0;
+        for (int i = 0; i < size; i++) {
+            if (nums[i] < nums[mini]) {
+                mini = i;
+            }
+            if (nums[i] > nums[maxi]) {
+                maxi = i;
+            }
+        }
+
+        // Case 1: Remove both from the front
+        int front = max(mini, maxi) + 1;
+
+        // Case 2: Remove both from the back
+        int back = size - min(mini, maxi);
+
+        // Case 3: Remove one from front, one from back
+        int t1, t2;
+        if (mini > size / 2) {
+            t1 = size - mini;  // Delete from back
+        } else {
+            t1 = mini + 1;     // Delete from front
+        }
+
+        if (maxi > size / 2) {
+            t2 = size - maxi;  // Delete from back
+        } else {
+            t2 = maxi + 1;     // Delete from front
+        }
+
+        int middle = t1 + t2;
+        
+        return min({front, back, middle});
+    }
+};

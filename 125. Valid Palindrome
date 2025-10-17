@@ -1,0 +1,41 @@
+#include <cctype>  // For isalnum and tolower functions
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Approach:
+    - Use two pointers (`left` and `right`) starting from the beginning and end of the string.
+    - Skip any non-alphanumeric characters.
+    - Compare characters in a case-insensitive manner using `tolower`.
+    - If all corresponding characters match, the string is a palindrome.
+
+    ⚙️ Time Complexity: O(n), where n = length of the string
+    ⚙️ Space Complexity: O(1), only constant extra space used
+    */
+
+    bool isPalindrome(string s) {
+        int left = 0, right = s.size() - 1;
+        
+        while (left < right) {
+            if (!isalnum(s[left])) {
+                left++;
+                continue;
+            }
+            if (!isalnum(s[right])) {
+                right--;
+                continue;
+            }
+            
+            if (tolower(s[left]) != tolower(s[right])) {
+                return false;
+            }
+            
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+};

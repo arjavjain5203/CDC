@@ -1,0 +1,49 @@
+/*
+🔹 Approach:
+This program finds and prints all the unique repeating (duplicate) elements in an array.
+
+1. First, we sort the array so that duplicates appear consecutively.
+2. We use a `set<int> printed` to ensure that each duplicate number is printed only once.
+3. While iterating, if the current element is equal to the next element **and** has not been printed before,
+   we print it and insert it into the `printed` set.
+
+✅ Example:
+Input:  [1, 1, 2, 3, 4, 4, 5, 2]
+Sorted: [1, 1, 2, 2, 3, 4, 4, 5]
+Output: 1 2 4
+
+🔹 Time Complexity:
+O(n log n)
+→ Sorting takes O(n log n)  
+→ Traversal + set lookup takes O(n)
+
+🔹 Space Complexity:
+O(k)
+→ 'printed' set stores only the unique repeating elements
+→ In worst case k ≤ n (but usually small)
+
+✅ Alternative:
+You can also solve this in O(n) time using a frequency map, without sorting.
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void findRepeatingElements(vector<int>& arr) {
+    sort(arr.begin(), arr.end());    // Sort the array
+    set<int> printed;                // To avoid printing duplicates multiple times
+    
+    cout << "The repeating elements are: ";
+    for (int i = 0; i < arr.size() - 1; i++) {
+        if (arr[i] == arr[i + 1] && printed.find(arr[i]) == printed.end()) {
+            cout << arr[i] << " ";
+            printed.insert(arr[i]);  // Mark as printed
+        }
+    }
+}
+
+int main() {
+    vector<int> arr = {1, 1, 2, 3, 4, 4, 5, 2};
+    findRepeatingElements(arr);
+    return 0;
+}

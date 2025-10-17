@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/*
+🔹 Approach:
+The pivot index is the index where the sum of all elements to the left is equal to 
+the sum of all elements to the right.
+
+Steps:
+1. First compute the total sum (tsum) of the array.
+2. Maintain a running prefix sum (cs = 0 initially).
+3. For each index i:
+     - Check if:
+           left sum == right sum
+           → cs == tsum - cs - nums[i]
+       If true, return i as the pivot index.
+     - Otherwise, update cs by adding nums[i].
+4. If no pivot index is found, return -1.
+
+✅ Example:
+nums = [1, 7, 3, 6, 5, 6]
+tsum = 28
+
+i = 3 → value = 6
+left sum (cs) = 11
+right sum = 28 - 11 - 6 = 11
+✅ Pivot index = 3
+
+🔹 Time Complexity:
+O(n)  
+(One pass to compute total sum, one pass to find pivot)
+
+🔹 Space Complexity:
+O(1)  
+(No extra space used, only variables)
+*/
+
+class Solution {
+public:
+    int pivotIndex(vector<int>& nums) {
+        int tsum = 0;
+
+        // Step 1: Calculate total sum
+        for (int i = 0; i < nums.size(); i++) {
+            tsum += nums[i];
+        }
+
+        int cs = 0;  // Current prefix sum
+
+        // Step 2: Find pivot index
+        for (int i = 0; i < nums.size(); i++) {
+            if (cs == tsum - cs - nums[i]) {
+                return i;
+            }
+            cs += nums[i];
+        }
+
+        return -1;  // No pivot found
+    }
+};
+

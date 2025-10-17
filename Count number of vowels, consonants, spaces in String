@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Approach:
+    - Convert the string to lowercase to handle case-insensitive comparison.
+    - Iterate through each character:
+        - If it is a vowel (a, e, i, o, u), increment vowels count.
+        - If it is a consonant (a-z but not a vowel), increment consonants count.
+        - If it is a whitespace (' '), increment whitespace count.
+    - Return the counts as a tuple (consonants, vowels, whitespaces).
+
+    ⚙️ Time Complexity: O(n), where n = length of the string
+    ⚙️ Space Complexity: O(1), only constant extra space used
+    */
+
+    tuple<int, int, int> countCharacters(const string& str) {
+        int vowels = 0, consonants = 0, whitespaces = 0;
+
+        for (char ch : str) {
+            char lower = tolower(ch);
+            if (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u') {
+                vowels++;
+            } else if (lower >= 'a' && lower <= 'z') {
+                consonants++;
+            } else if (ch == ' ') {
+                whitespaces++;
+            }
+        }
+
+        return make_tuple(consonants, vowels, whitespaces);
+    }
+};

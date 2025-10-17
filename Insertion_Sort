@@ -1,0 +1,32 @@
+/*
+🔹 Approach (Insertion Sort):
+Build the sorted array one element at a time by picking elements and placing them
+in their correct position relative to the already sorted left part.
+
+🔹 Time Complexity:
+- Worst Case: O(n²)
+- Average: O(n²)
+- Best Case: O(n) (already sorted)
+
+🔹 Space Complexity:
+O(1)  (in-place)
+
+🔹 Stable: ✅ Yes
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+void insertionSort(vector<int>& arr) {
+    int n = arr.size();
+    for(int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        // Shift elements to make space for key
+        while(j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}

@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/*
+🔹 Approach:
+We use Kadane's Algorithm to find the maximum subarray sum efficiently.
+- Maintain a running sum `currentSum`.
+- If `currentSum` becomes negative, reset it to 0.
+- Track the maximum sum encountered using `maxSum`.
+
+⚙️ Time Complexity:  O(n)
+⚙️ Space Complexity: O(1)
+*/
+
+int maxSubArray(vector<int>& nums) {
+    int currentSum = 0;
+    int maxSum = INT_MIN;
+
+    for (int i = 0; i < nums.size(); i++) {
+        currentSum += nums[i];
+        maxSum = max(maxSum, currentSum);
+        if (currentSum < 0) {
+            currentSum = 0;
+        }
+    }
+    return maxSum;
+}
