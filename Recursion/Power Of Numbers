@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Helper Function: Reverse a number using recursion
+    - Takes an integer `n` and builds `reversed` by extracting digits one by one.
+    - Base case: when n becomes 0, return the reversed number.
+    */
+    int rev(int n, int reversed) {
+        if (n == 0) return reversed;
+        int t = n % 10;
+        reversed = reversed * 10 + t;
+        return rev(n / 10, reversed);
+    }
+
+    /*
+    🔹 Problem Statement:
+    Given an integer n, reverse its digits to form a new number a,
+    and return n raised to the power of a (i.e., n^a).
+
+    🔹 Approach:
+    - Use recursion to reverse the number.
+    - Use pow(n, a) to compute n^a.
+
+    ⚙️ Time Complexity:
+       - Reversing digits: O(d), where d = number of digits
+       - Exponentiation: O(log a) using pow()
+       ✅ Total: O(d + log a)
+
+    ⚙️ Space Complexity:
+       - Recursion stack for reversal: O(d)
+       ✅ Total: O(d)
+    */
+    int reverseExponentiation(int n) {
+        int a = rev(n, 0);  // Reverse the number
+        return pow(n, a);   // Compute n^a
+    }
+};

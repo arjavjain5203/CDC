@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Problem Statement:
+    Given a string, calculate and print the frequency of each character.
+
+    🔹 Approach:
+    - Use an unordered_map to store the frequency of each character.
+    - Iterate through the string and update the count of each character in the map.
+    - Iterate over the map to print each character with its frequency.
+    
+    ⚙️ Time Complexity: O(n), where n = length of the string
+    ⚙️ Space Complexity: O(k), where k = number of unique characters in the string
+    */
+
+    unordered_map<char, int> characterFrequency(const string& s) {
+        unordered_map<char, int> freq;
+
+        // Count frequency of each character
+        for (char c : s) {
+            freq[c]++;
+        }
+
+        return freq;
+    }
+
+    // Optional: Function to print frequencies
+    void printFrequency(const string& s) {
+        unordered_map<char, int> freq = characterFrequency(s);
+        for (auto &pair : freq) {
+            cout << pair.first << pair.second << " ";
+        }
+        cout << endl;
+    }
+};

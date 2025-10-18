@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Problem Statement:
+    Given a string, return the character that occurs the maximum number of times.
+    If multiple characters have the same maximum frequency, return any one of them.
+
+    🔹 Approach:
+    - Use an unordered_map to count frequency of each character.
+    - Iterate through the map to find the character with the maximum frequency.
+    - Return that character.
+
+    ⚙️ Time Complexity: O(n), where n = length of the string
+    ⚙️ Space Complexity: O(k), where k = number of unique characters in the string
+    */
+
+    char maxOccurringChar(const string& s) {
+        unordered_map<char, int> freq;
+
+        // Count frequency of each character
+        for (char c : s) {
+            freq[c]++;
+        }
+
+        // Find maximum occurring character
+        char maxChar = s[0];
+        int maxFreq = 0;
+        for (auto &pair : freq) {
+            if (pair.second > maxFreq) {
+                maxFreq = pair.second;
+                maxChar = pair.first;
+            }
+        }
+
+        return maxChar;
+    }
+};

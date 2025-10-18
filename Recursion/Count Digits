@@ -1,0 +1,48 @@
+/*
+------------------------------------------------------------
+✅ Problem:
+Count how many digits of a number evenly divide the number itself.
+
+✅ Approach:
+1. We use recursion to process each digit of the number.
+2. The `helper` function extracts digits one by one (using % and /).
+3. For each digit:
+   - Ignore if the digit is 0.
+   - If it divides the original number (`number % digit == 0`), increment the count.
+4. Recursion stops when all digits are processed.
+
+✅ Time Complexity:  O(d)
+   → where d is the number of digits in the number.
+
+✅ Space Complexity: O(d)
+   → due to recursive call stack (one call per digit).
+------------------------------------------------------------
+*/
+
+class Solution {
+public:
+
+    // Recursive helper function to count divisible digits
+    // number   → The original number (constant reference)
+    // n        → The current reduced number to extract digits
+    // complete → Count of digits that evenly divide 'number'
+    int helper(int number, int n, int complete) {
+        // Base Case: If no digits are left, return total count
+        if (n == 0) 
+            return complete;
+        
+        int t = n % 10;  // Extract last digit
+        
+        // Check if digit is non-zero and divides the number
+        if (t != 0 && number % t == 0) 
+            complete++;
+        
+        // Recur for the remaining digits
+        return helper(number, n / 10, complete);
+    }
+    
+    // Function to start the recursive digit check
+    int evenlyDivides(int n) {
+        return helper(n, n, 0);  // Start with count = 0
+    }
+};

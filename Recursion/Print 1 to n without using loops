@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Recursive Helper Function:
+    Prints numbers from 's' to 'end' using recursion.
+    - Base Case: If s > end, stop recursion.
+    - Recursive Case: Print s, then call helper(s + 1, end).
+    */
+    void helper(int s, int end) {
+        if (s > end) {
+            return; // Base case
+        }
+        cout << s << " ";  // Print the current number
+        helper(s + 1, end); // Recursive call with incremented value
+    }
+
+    /*
+    🔹 Problem Statement:
+    Print numbers from 1 to n using recursion.
+
+    🔹 Approach:
+    - Use a recursive helper function starting from 1 up to n.
+    - Print current value, recursively call with the next number.
+
+    ⚙️ Time Complexity: O(n), as we make n recursive calls
+    ⚙️ Space Complexity: O(n), recursion stack space
+    */
+    void printTillN(int n) {
+        helper(1, n);
+    }
+};

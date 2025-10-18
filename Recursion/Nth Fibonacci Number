@@ -1,0 +1,50 @@
+/*
+-----------------------------------------------------------------
+✅ Problem:
+Return the N-th Fibonacci number using recursion with memoization.
+
+✅ Approach:
+We use a **Top-Down Dynamic Programming (Memoization)** technique:
+1️⃣ The `helper()` function computes Fibonacci using recursion.
+2️⃣ A `dp[]` array stores already computed values to avoid rework.
+3️⃣ Base Cases:
+      fib(0) = 0
+      fib(1) = 1
+4️⃣ If dp[n] is already computed, return it directly.
+5️⃣ Otherwise, compute and store:
+      dp[n] = fib(n-1) + fib(n-2)
+
+✅ Time Complexity: O(n)
+   Each state from 0 to n is computed once due to memoization.
+
+✅ Space Complexity: O(n)
+   - dp[] array uses O(n)
+   - Recursive stack depth is O(n)
+
+✅ Note:
+- No main() function included (as requested).
+-----------------------------------------------------------------
+*/
+
+class Solution {
+public:
+  
+    // Recursive helper with memoization
+    int helper(int n, vector<int>& dp) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        
+        // Return if already computed
+        if (dp[n] != -1) return dp[n];
+        
+        // Store result to avoid recomputation
+        dp[n] = helper(n - 1, dp) + helper(n - 2, dp);
+        return dp[n];
+    }
+    
+    // Returns the n-th Fibonacci number
+    int nthFibonacci(int n) {
+        vector<int> dp(n + 1, -1);  // Memoization array
+        return helper(n, dp);
+    }
+};

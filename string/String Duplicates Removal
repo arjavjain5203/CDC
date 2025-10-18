@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /*
+    🔹 Problem Statement:
+    Given a string, remove all duplicate characters and return the resultant string
+    while maintaining the original order of characters.
+
+    🔹 Approach:
+    - Use an unordered_set 'visit' to track characters already seen.
+    - Use a vector 'order' to maintain the insertion order of unique characters.
+    - Iterate through the string:
+        - If the character is not in 'visit', add it to 'visit' and 'order'.
+    - Convert 'order' vector to a string and return.
+
+    ⚙️ Time Complexity: O(n), where n = length of the string
+    ⚙️ Space Complexity: O(k), where k = number of unique characters in the string
+    */
+
+    string removeDuplicates(string &s) {
+        unordered_set<char> visit;  // To track unique characters
+        vector<char> order;         // To maintain original order
+
+        // Iterate through each character
+        for(char c : s) {
+            if(visit.find(c) == visit.end()) { // If not already seen
+                visit.insert(c);               // Mark as seen
+                order.push_back(c);            // Preserve order
+            }
+        }
+
+        // Build the result string from ordered unique characters
+        string ans;
+        for(char c : order) {
+            ans += c;
+        }
+
+        return ans;
+    }
+};

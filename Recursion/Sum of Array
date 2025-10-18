@@ -1,0 +1,43 @@
+/*
+------------------------------------------------------------
+✅ Problem:
+Find the sum of all elements in an array using recursion.
+
+✅ Approach:
+1. The `helper` function recursively traverses the array.
+2. It takes three parameters:
+   - `arr` → the array of integers.
+   - `i` → current index being processed.
+   - `count` → cumulative sum so far.
+3. Base Case: When `i` reaches the size of the array, return `count`.
+4. Recursively add the current element and call helper for the next index.
+
+✅ Time Complexity:  O(n)
+   → Each element is visited exactly once.
+
+✅ Space Complexity: O(n)
+   → Due to recursion stack (one function call per element).
+------------------------------------------------------------
+*/
+
+class Solution {
+public:
+
+    // Recursive helper to compute sum of array elements
+    int helper(vector<int> &arr, int i, int count) {
+        // Base condition: if index reaches array size, return accumulated sum
+        if (i == arr.size()) 
+            return count;
+
+        // Add current element to count
+        count += arr[i];
+
+        // Recur for the next element
+        return helper(arr, i + 1, count);
+    }
+  
+    // Function to return sum of elements using recursion
+    int arraySum(vector<int>& arr) {
+        return helper(arr, 0, 0);  // Start from index 0 with sum = 0
+    }
+};

@@ -1,0 +1,63 @@
+/*
+-------------------------------------------------------------
+✅ Problem:
+Find the "pivot index" in an array such that the sum of all 
+elements to the left of the index is equal to the sum of 
+all elements to the right.
+
+✅ Approach:
+1️⃣ First compute the total sum of the array using recursion.
+2️⃣ Then recursively iterate to check if for any index:
+     leftSum == totalSum - leftSum - nums[i]
+   ➝ If yes, return that index.
+   ➝ Else move to the next index.
+
+✅ Functions Used:
+✔ summer(nums, i, sum)
+   → Recursively computes the total sum of the array.
+
+✔ helper(nums, tsum, csum, i)
+   → Recursively finds the pivot index where:
+       left sum == right sum
+
+✅ Time Complexity: O(n)
+   - One pass for sum calculation.
+   - One pass to find pivot index.
+
+✅ Space Complexity: O(n)
+   - Due to recursive call stack.
+
+✅ Note: No main() function as requested.
+-------------------------------------------------------------
+*/
+
+class Solution {
+public:
+
+    // Recursively computes total sum of the array
+    int summer(vector<int>& nums, int i, int sum) {
+        if (i == nums.size()) {
+            return sum;
+        }
+        return summer(nums, i + 1, sum + nums[i]);
+    }
+
+    // Recursively finds the pivot index
+    int helper(vector<int>& nums, int &tsum, int csum, int i) {
+        // If end is reached and no pivot found
+        if (i == nums.size()) return -1;
+
+        // Check if current index is the pivot
+        if (csum == tsum - csum - nums[i]) 
+            return i;
+
+        // Recur with updated current sum
+        return helper(nums, tsum, csum + nums[i], i + 1);
+    }
+
+    // Function to get the pivot index
+    int pivotIndex(vector<int>& nums) {
+        int tsum = summer(nums, 0, 0);  // Get total sum
+        return helper(nums, tsum, 0, 0); // Search pivot
+    }
+};
