@@ -1,0 +1,144 @@
+/*
+-----------------------------------------------------------------
+✅ Problem:
+Sort an array of integers (including negative values) efficiently 
+using Counting Sort.
+
+✅ Approach:
+1️⃣ Find the minimum and maximum values in the array.
+2️⃣ If negatives exist, adjust all numbers using an offset so
+   indices remain non-negative.
+3️⃣ Create a frequency array `count[]` to store occurrences.
+4️⃣ Iterate through the frequency array and reconstruct the sorted
+   array by pushing each number according to its frequency.
+
+✅ Handles Negative Numbers:
+- If minVal < 0, we shift elements using:
+      offset = -minVal
+- Access index using: count[num + offset]
+
+✅ Time Complexity: O(n + k)
+   - n = size of the input array
+   - k = range of numbers (maxVal - minVal)
+
+✅ Space Complexity: O(k)
+   - Extra space used for frequency array + output
+
+✅ Suitable For:
+- Large number of elements with limited range
+- Arrays containing negative integers
+
+✅ No main() function is added (as per your instruction)
+-----------------------------------------------------------------
+*/
+
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        if (nums.empty()) return nums;
+
+        // Step 1: Find min and max values
+        int maxVal = *max_element(nums.begin(), nums.end());
+        int minVal = *min_element(nums.begin(), nums.end());
+
+        // Step 2: Handle negatives with offset
+        int offset = (minVal < 0) ? -minVal : 0;
+
+        // Step 3: Create frequency array
+        vector<int> count(maxVal + offset + 1, 0);
+        
+        // Step 4: Count occurrences
+        for (int num : nums) {
+            count[num + offset]++;
+        }
+
+        // Step 5: Rebuild sorted array
+        vector<int> sorted;
+        sorted.reserve(nums.size());
+        for (int i = 0; i < count.size(); ++i) {
+            while (count[i]--) {
+                sorted.push_back(i - offset);
+            }
+        }
+
+        return sorted;
+    }
+};
+
+
+///Another approach
+
+
+
+/*
+-----------------------------------------------------------------
+✅ Problem:
+Sort an array of integers using Heap Sort (Max-Heap approach).
+
+✅ Approach:
+1️⃣ Build a Max Heap:
+   - Start from the last non-leaf node and call `heapify` for each.
+2️⃣ Extract elements one by one:
+   - Swap the root (largest element) with the last element.
+   - Reduce the heap size and call `heapify` again.
+3️⃣ Store the removed elements in the correct position.
+
+✅ Helper Function (heapify):
+- Ensures the subtree rooted at index `i` satisfies the max-heap property.
+- Compares parent with left and right children and swaps if needed.
+- Recursively adjusts the affected subtree.
+
+✅ Time Complexity:
+- Building the heap: O(n)
+- Heapify calls during extraction: O(n log n)
+✅ Total: O(n log n)
+
+✅ Space Complexity: O(1) auxiliary
+✅ In-place sorting (only result array is returned)
+
+✅ Notes:
+- No main() function is included as per your requirement.
+-----------------------------------------------------------------
+*/
+
+class Solution {
+public:
+    // Heapify function to maintain max-heap property
+    void heapify(vector<int>& nums, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        // Compare with right child first (optional order)
+        if (right < n && nums[right] > nums[largest])
+            largest = right;
+        if (left < n && nums[left] > nums[largest])
+            largest = left;
+
+        // If the largest is not the root
+        if (largest != i) {
+            swap(nums[i], nums[largest]);
+            heapify(nums, n, largest);  // Recursively fix the affected subtree
+        }
+    }
+
+    // Function to sort the array using Heap Sort
+    vector<int> sortArray(vector<int>& nums) {
+        vector<int> ans(nums.size());
+        int n = nums.size();
+
+        // Step 1: Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(nums, n, i);
+        }
+
+        // Step 2: Extract elements from heap one by one
+        for (int i = n - 1; i >= 0; i--) {
+            ans[i] = nums[0];      // Store max element
+            swap(nums[0], nums[i]); // Move max to end
+            heapify(nums, i, 0);   // Heapify reduced heap
+        }
+
+        return ans;
+    }
+};
