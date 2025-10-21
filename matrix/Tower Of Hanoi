@@ -1,0 +1,47 @@
+✅ Problem:
+Count the total number of moves required to solve the Tower of Hanoi puzzle.
+
+You have `n` disks and three rods:
+- Source rod (from)
+- Destination rod (to)
+- Auxiliary rod (aux)
+
+Goal:
+Move all `n` disks from `from` → `to`, following the rules:
+1️⃣ Only one disk can be moved at a time.
+2️⃣ A larger disk cannot be placed on a smaller disk.
+3️⃣ All disks start on the source rod.
+
+-----------------------------------------------------------------
+✅ Recursive Approach:
+To move `n` disks from `from` → `to` using `aux`:
+1️⃣ Move `n-1` disks from `from` → `aux` (using `to` as helper)
+2️⃣ Move the 1 remaining disk directly from `from` → `to`
+3️⃣ Move the `n-1` disks from `aux` → `to` (using `from` as helper)
+
+So, recurrence relation:
+T(n) = 2*T(n-1) + 1
+
+Base case:
+If n == 0 → 0 moves required
+
+-----------------------------------------------------------------
+✅ Code:
+*/
+
+int towerOfHanoi(int n, int from, int to, int aux) {
+    if (n == 0) return 0;
+
+    int count = towerOfHanoi(n - 1, from, aux, to);  // Step 1
+    count += 1;                                      // Step 2 (move largest disk)
+    count += towerOfHanoi(n - 1, aux, to, from);     // Step 3
+
+    return count;
+}
+
+-----------------------------------------------------------------
+✅ Example:
+n = 3 → Total moves = 2³ - 1 = 7
+
+✅ Time Complexity:  O(2ⁿ)
+✅ Space Complexity: O(n)   (due to recursive call stack)
