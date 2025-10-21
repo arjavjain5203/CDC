@@ -1,0 +1,83 @@
+/*
+-----------------------------------------------------------------
+✅ Problem:
+Given a 2D matrix, return all elements in spiral order.
+
+Example:
+Input:
+[
+ [1, 2, 3],
+ [4, 5, 6],
+ [7, 8, 9]
+]
+Output: [1, 2, 3, 6, 9, 8, 7, 4, 5]
+
+✅ Approach (Spiral Traversal):
+We maintain four boundaries:
+    top, bottom, left, right
+We move in 4 directions repeatedly:
+1️⃣ Left → Right  along the top boundary.
+2️⃣ Top → Bottom  along the right boundary.
+3️⃣ Right → Left  along the bottom boundary.
+4️⃣ Bottom → Top  along the left boundary.
+
+After completing each direction:
+- Shrink the corresponding boundary.
+- Stop when boundaries cross each other.
+
+✅ Time Complexity:  O(m * n)
+   → Each element is visited exactly once.
+✅ Space Complexity: O(1)
+   → Apart from the output vector.
+
+✅ Edge Cases:
+- Empty matrix or single row/column.
+- Non-square matrices.
+
+✅ Notes:
+- Use `bottom = matrix.size() - 1`, `right = matrix[0].size() - 1`
+  because indices are 0-based.
+
+✅ No main() function included.
+-----------------------------------------------------------------
+*/
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> ans;
+        if (matrix.empty() || matrix[0].empty()) return ans;
+
+        int top = 0, bottom = matrix.size() - 1;
+        int left = 0, right = matrix[0].size() - 1;
+
+        while (top <= bottom && left <= right) {
+            // 1️⃣ Left → Right
+            for (int i = left; i <= right; i++)
+                ans.push_back(matrix[top][i]);
+            top++;
+
+            // 2️⃣ Top → Bottom
+            for (int i = top; i <= bottom; i++)
+                ans.push_back(matrix[i][right]);
+            right--;
+
+            // Boundary check (to avoid double traversal)
+            if (top <= bottom) {
+                // 3️⃣ Right → Left
+                for (int i = right; i >= left; i--)
+                    ans.push_back(matrix[bottom][i]);
+                bottom--;
+            }
+
+            if (left <= right) {
+                // 4️⃣ Bottom → Top
+                for (int i = bottom; i >= top; i--)
+                    ans.push_back(matrix[i][left]);
+                left++;
+            }
+        }
+
+        return ans;
+    }
+};
