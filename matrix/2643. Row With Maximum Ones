@@ -1,0 +1,70 @@
+/*
+-----------------------------------------------------------------
+✅ Problem:
+Given a binary matrix `mat` (only 0s and 1s),
+find the row with the **maximum number of 1’s**.
+Return a vector `{row_index, count_of_1s}`.
+
+If multiple rows have the same maximum number of 1s,
+return the **row with the smallest index**.
+
+-----------------------------------------------------------------
+✅ Approach:
+1️⃣ Iterate over each row of the matrix.
+2️⃣ Count the number of 1’s in the current row.
+3️⃣ If the count of 1s in this row is greater than the current maximum:
+    - Update `max_val` with the new count.
+    - Store the current row index `maxi`.
+4️⃣ After scanning all rows, return `{maxi, max_val}`.
+
+-----------------------------------------------------------------
+✅ Code:
+*/
+
+class Solution {
+public:
+    vector<int> rowAndMaximumOnes(vector<vector<int>>& mat) {
+        int maxi = 0;      // row index with maximum 1s
+        int max_val = 0;   // count of maximum 1s
+        int row = mat.size();
+        int col = mat[0].size();
+
+        for (int i = 0; i < row; i++) {
+            int curr_sum = 0;
+
+            // Count 1s in current row
+            for (int j = 0; j < col; j++) {
+                if (mat[i][j] == 1) {
+                    curr_sum += 1;
+                }
+            }
+
+            // Update max if this row has more 1s
+            if (curr_sum > max_val) {
+                max_val = curr_sum;
+                maxi = i;
+            }
+        }
+
+        return vector<int>{maxi, max_val};
+    }
+};
+
+-----------------------------------------------------------------
+✅ Example:
+Input:
+mat = [[0,1],[1,1],[0,0]]
+Output:
+{1, 2}
+Explanation:
+Row 1 has 2 ones, which is the maximum.
+
+-----------------------------------------------------------------
+✅ Time Complexity:  O(N * M)
+→ N = number of rows, M = number of columns
+✅ Space Complexity: O(1)
+→ Only uses constant extra space
+
+✅ Optimized Version:
+If each row is sorted (all 0s before 1s), we can use binary search to find the first 1 → O(N * log M)
+-----------------------------------------------------------------
