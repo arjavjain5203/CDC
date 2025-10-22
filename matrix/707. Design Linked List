@@ -1,0 +1,172 @@
+/*
+-----------------------------------------------------------------
+✅ Problem: Design a Singly Linked List
+
+You need to design a data structure for a **singly linked list** that supports the following operations:
+- get(index)       → Return the value of the node at the given index.
+- addAtHead(val)   → Insert a node with value `val` at the head.
+- addAtTail(val)   → Append a node with value `val` at the tail.
+- addAtIndex(i,v)  → Insert a node with value `v` at index `i`.
+- deleteAtIndex(i) → Delete the node at index `i`.
+
+-----------------------------------------------------------------
+✅ Approach:
+
+We'll create two classes:
+1️⃣ **Node class**
+   - Represents each element of the linked list with two members:
+     → `data` : holds the integer value.
+     → `next` : pointer to the next node.
+
+2️⃣ **MyLinkedList class**
+   - Contains:
+     → `head` pointer for the start of the list.
+     → `size` to keep track of the number of nodes.
+   - Implements all the given functions.
+
+-----------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    // Parameterized constructor
+    Node(int val) {
+        this->data = val;
+        this->next = nullptr;
+    }
+
+    // Default constructor
+    Node() {
+        this->data = 0;
+        this->next = nullptr;
+    }
+};
+
+class MyLinkedList {
+private:
+    Node* head; // Pointer to the head of the list
+    int size;   // Number of nodes in the list
+
+public:
+    // Constructor initializes empty list
+    MyLinkedList() {
+        head = nullptr;
+        size = 0;
+    }
+
+    // Function to get value at a specific index
+    int get(int index) {
+        if (index < 0 || index >= size)
+            return -1;
+
+        Node* temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp->next;
+        }
+        return temp->data;
+    }
+
+    // Add node at the head of the list
+    void addAtHead(int val) {
+        Node* node = new Node(val);
+        node->next = head;
+        head = node;
+        size++;
+    }
+
+    // Add node at the tail of the list
+    void addAtTail(int val) {
+        Node* node = new Node(val);
+
+        if (!head) {
+            head = node;
+            size++;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp->next)
+            temp = temp->next;
+
+        temp->next = node;
+        size++;
+    }
+
+    // Add node at a specific index
+    void addAtIndex(int index, int val) {
+        if (index < 0 || index > size)
+            return;
+
+        if (index == 0) {
+            addAtHead(val);
+            return;
+        }
+
+        Node* temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp->next;
+        }
+
+        Node* node = new Node(val);
+        node->next = temp->next;
+        temp->next = node;
+        size++;
+    }
+
+    // Delete node at a specific index
+    void deleteAtIndex(int index) {
+        if (index < 0 || index >= size)
+            return;
+
+        if (index == 0) {
+            Node* del = head;
+            head = head->next;
+            delete del;
+            size--;
+            return;
+        }
+
+        Node* temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp->next;
+        }
+
+        Node* del = temp->next;
+        temp->next = temp->next->next;
+        delete del;
+        size--;
+    }
+};
+
+/*
+-----------------------------------------------------------------
+✅ Example Usage:
+
+MyLinkedList* obj = new MyLinkedList();
+obj->addAtHead(10);
+obj->addAtTail(20);
+obj->addAtIndex(1,15);
+int value = obj->get(1);  // Output: 15
+obj->deleteAtIndex(1);    // Deletes the node with value 15
+
+-----------------------------------------------------------------
+✅ Time Complexity:
+- get()          → O(N)
+- addAtHead()    → O(1)
+- addAtTail()    → O(N)
+- addAtIndex()   → O(N)
+- deleteAtIndex()→ O(N)
+
+✅ Space Complexity: O(1) (ignoring storage for nodes)
+
+✅ Notes:
+- All operations are performed iteratively.
+- Memory is managed using dynamic allocation.
+- Handles edge cases like empty list and invalid indices.
+
+-----------------------------------------------------------------
+*/

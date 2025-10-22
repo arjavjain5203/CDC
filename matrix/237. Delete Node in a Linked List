@@ -1,0 +1,76 @@
+/*
+-----------------------------------------------------------------
+✅ Problem: Delete Node in a Linked List (LeetCode #237)
+
+You are given the head of a singly linked list and a node to delete.  
+You are **not given access to the head of the list**, only the node to be deleted.
+
+You must delete the given node from the linked list in O(1) time.
+
+-----------------------------------------------------------------
+✅ Approach:
+
+Since we cannot access the previous node (because we are not given the head),  
+we use a **value-copying technique**.
+
+Steps:
+1️⃣ Copy the value of the next node into the current node.
+2️⃣ Link the current node to `node->next->next` (skip the next node).
+3️⃣ Delete the next node (which now holds a duplicate value).
+
+This effectively removes the given node from the list without head access.
+
+⚠️ Constraint: The node to delete will **never be the last node**.
+
+-----------------------------------------------------------------
+✅ Implementation:
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        // Step 1: Copy data from next node
+        ListNode* temp = node->next;
+        node->val = temp->val;
+
+        // Step 2: Skip the next node
+        node->next = temp->next;
+
+        // Step 3: Free the memory of the deleted node
+        delete temp;
+    }
+};
+
+/*
+-----------------------------------------------------------------
+✅ Example:
+
+Input: Linked List = [4 -> 5 -> 1 -> 9], Node to delete = 5  
+Output: [4 -> 1 -> 9]
+
+Explanation:
+We copy value from next node (1) to current node (5 → 1),  
+and then delete the next node (which originally held 1).
+
+-----------------------------------------------------------------
+✅ Time Complexity: O(1)
+✅ Space Complexity: O(1)
+
+✅ Key Insight:
+Instead of removing the given node directly (which needs access to previous node),
+we **overwrite** its data with the next node and remove the duplicate next node.
+
+✅ Edge Case:
+- The given node is **never the tail**, because there’s no next node to copy from.
+
+-----------------------------------------------------------------
+*/
