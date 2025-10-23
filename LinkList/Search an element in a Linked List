@@ -1,0 +1,73 @@
+/*
+-----------------------------------------------------------------
+✅ Problem: Linear Search in a Linked List
+
+Given a singly linked list and a key, perform a **linear search**
+to find whether the key exists in the list.
+
+If found, return the pointer to the node containing the key.  
+Otherwise, return NULL.
+
+-----------------------------------------------------------------
+✅ Approach:
+
+We traverse the linked list node by node and compare the `data`  
+of each node with the given `key`.  
+
+If a match is found → return the current node pointer.  
+If we reach the end without a match → return NULL.
+
+This is the most straightforward search technique for a linked list.
+
+-----------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Definition of Node structure
+struct Node {
+    int data;
+    Node* next;
+};
+
+// Function to perform linear search in a linked list
+Node* search(Node* head, int key) {
+    Node* p = head;
+
+    while (p != nullptr) {
+        if (p->data == key) {
+            return p;  // Key found → return pointer to node
+        }
+        p = p->next;   // Move to next node
+    }
+
+    return nullptr;     // Key not found → return NULL
+}
+
+/*
+-----------------------------------------------------------------
+✅ Example Usage (No main() as per your repo standard):
+
+Input Linked List: 10 -> 20 -> 30 -> 40  
+Key: 30  
+Output: Pointer to node containing 30
+
+Explanation:
+The function traverses nodes sequentially until it finds 30.
+
+-----------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - We may traverse all n nodes in the worst case.
+
+✅ Space Complexity: O(1)
+   - Only uses a pointer variable; no extra space used.
+
+✅ Notes:
+- Linear search is efficient for short linked lists.
+- For sorted lists, we can terminate early if the current node’s value exceeds the key.
+- For large data, consider other structures (like BSTs or hash maps) for faster search.
+
+-----------------------------------------------------------------
+*/

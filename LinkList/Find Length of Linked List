@@ -1,0 +1,57 @@
+/*
+-----------------------------------------------------------------
+✅ Problem: Count Nodes in a Linked List
+
+Given the head pointer of a singly linked list,  
+the task is to count and return the total number of nodes present in the list.
+
+-----------------------------------------------------------------
+✅ Approach:
+
+1️⃣ Initialize a counter `count = 0`.  
+2️⃣ Traverse the linked list using a pointer (`head`).  
+3️⃣ For each node encountered, increment the counter.  
+4️⃣ When the pointer reaches `NULL`, the traversal ends.  
+5️⃣ Return the final count.
+
+This is a simple **iterative traversal** approach.
+
+-----------------------------------------------------------------
+✅ Implementation:
+*/
+
+int getCount(struct Node* head) {
+    int count = 0;
+
+    // Traverse until we reach the end of the list
+    while (head) {
+        count++;          // Increment counter for each node
+        head = head->next; // Move to next node
+    }
+
+    return count; // Return total number of nodes
+}
+
+/*
+-----------------------------------------------------------------
+✅ Example:
+
+Input:  10 -> 20 -> 30 -> NULL  
+Output: 3  
+
+Explanation:  
+The list contains three nodes, hence count = 3.
+
+-----------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - Each node is visited exactly once.
+
+✅ Space Complexity: O(1)
+   - Uses only a single integer variable for counting.
+
+✅ Notes:
+- Works for both empty and non-empty lists.
+- For an empty list (head = NULL), function returns 0.
+
+-----------------------------------------------------------------
+*/

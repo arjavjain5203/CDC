@@ -1,0 +1,72 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Reverse a Singly Linked List
+
+Given the head of a singly linked list, reverse the list, 
+and return the new head.
+
+Example:
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> NULL  
+Output: 5 -> 4 -> 3 -> 2 -> 1 -> NULL
+--------------------------------------------------------------------
+✅ Approach (Iterative Method):
+
+1️⃣ Initialize three pointers:
+   - `prev` = nullptr → Tracks the previous node.
+   - `curr` = head → Current node being processed.
+   - `next` = nullptr → Temporarily stores the next node.
+
+2️⃣ Traverse the list:
+   - Store the next node: `next = curr->next`
+   - Reverse the link: `curr->next = prev`
+   - Move forward: `prev = curr`, `curr = next`
+
+3️⃣ When traversal completes, `prev` will point to 
+   the new head of the reversed linked list.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head) return nullptr;  // Handle empty list
+        
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        ListNode* next = nullptr;
+
+        while (curr) {
+            next = curr->next;   // Step 1: Store next node
+            curr->next = prev;   // Step 2: Reverse link
+            prev = curr;         // Step 3: Move prev forward
+            curr = next;         // Step 4: Move curr forward
+        }
+
+        return prev; // New head of reversed list
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Initial:  1 -> 2 -> 3 -> NULL  
+Step 1:   1 <- 2 -> 3 -> NULL  
+Step 2:   1 <- 2 <- 3 -> NULL  
+Return head = 3
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - Each node is visited once.
+
+✅ Space Complexity: O(1)
+   - Only uses constant extra space (three pointers).
+
+✅ Alternative:
+   - A recursive approach can achieve the same result 
+     with O(n) space (due to recursion stack).
+
+--------------------------------------------------------------------
+*/

@@ -1,0 +1,73 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Find the Middle of a Linked List
+
+Given the head of a singly linked list, return the middle node.
+If there are two middle nodes, return the second one.
+
+Example:
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> NULL  
+Output: 3
+
+Input:  1 -> 2 -> 3 -> 4 -> 5 -> 6 -> NULL  
+Output: 4  (Second middle node)
+--------------------------------------------------------------------
+✅ Approach (Tortoise & Hare / Slow & Fast Pointer Technique):
+
+1️⃣ Initialize two pointers:
+    - `slow` = head
+    - `fast` = head
+
+2️⃣ Move the pointers:
+    - `slow` moves one step at a time → `slow = slow->next`
+    - `fast` moves two steps at a time → `fast = fast->next->next`
+
+3️⃣ When `fast` reaches the end (NULL), `slow` will be at the middle.
+
+📘 Why it works:
+    - `fast` moves twice as fast, so when it covers the entire list,
+      `slow` covers half → the middle point.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow; // Middle node
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+List: 1 -> 2 -> 3 -> 4 -> 5 -> NULL
+
+Step 1: slow=1, fast=1  
+Step 2: slow=2, fast=3  
+Step 3: slow=3, fast=5  
+⏩ fast->next is NULL → stop  
+Return slow (3)
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - Traverses list once (fast pointer moves twice as fast).
+
+✅ Space Complexity: O(1)
+   - Uses only two pointers.
+
+✅ Alternative:
+   - Count total nodes, then move to n/2 index → O(2n), less efficient.
+
+--------------------------------------------------------------------
+*/

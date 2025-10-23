@@ -1,0 +1,99 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Merge Two Sorted Linked Lists
+
+You are given the heads of two sorted linked lists, `list1` and `list2`.
+Merge them into one sorted linked list and return its head.
+
+Example:
+Input:
+list1 = 1 -> 2 -> 4
+list2 = 1 -> 3 -> 4
+
+Output:
+1 -> 1 -> 2 -> 3 -> 4 -> 4
+--------------------------------------------------------------------
+✅ Approach: Iterative Merge (Two-Pointer Technique)
+
+1️⃣ Create two pointers `list1` and `list2` to traverse both lists.
+
+2️⃣ Compare their current nodes:
+    - Attach the smaller node to the result list.
+    - Move the pointer forward in the list from which the node was taken.
+
+3️⃣ Continue until one list becomes NULL.
+4️⃣ Attach the remaining nodes from the other list (if any).
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (!list1) return list2;
+        if (!list2) return list1;
+
+        ListNode* head = nullptr; // head of merged list
+        ListNode* tail = nullptr; // last node of merged list
+
+        // Initialize head pointer
+        if (list1->val < list2->val) {
+            head = list1;
+            list1 = list1->next;
+        } else {
+            head = list2;
+            list2 = list2->next;
+        }
+
+        tail = head;
+
+        // Merge remaining nodes
+        while (list1 && list2) {
+            if (list1->val < list2->val) {
+                tail->next = list1;
+                list1 = list1->next;
+            } else {
+                tail->next = list2;
+                list2 = list2->next;
+            }
+            tail = tail->next;
+        }
+
+        // Attach remaining nodes
+        if (list1) tail->next = list1;
+        else tail->next = list2;
+
+        return head;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+list1 = 1 → 2 → 4  
+list2 = 1 → 3 → 4  
+
+Step 1: Compare 1 and 1 → take list1(1), head = 1  
+Step 2: Compare 2 and 1 → take list2(1)  
+Step 3: Compare 2 and 3 → take list1(2)  
+Step 4: Compare 4 and 3 → take list2(3)  
+Step 5: Compare 4 and 4 → take list1(4)  
+Step 6: Attach remaining list2(4)  
+
+Result → 1 → 1 → 2 → 3 → 4 → 4
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n + m)
+   - Each node of both lists is processed once.
+
+✅ Space Complexity: O(1)
+   - Only uses pointers, no extra list created.
+
+✅ Alternative:
+   - Recursive merge (cleaner but uses extra stack space: O(n + m)).
+
+--------------------------------------------------------------------
+*/
+
