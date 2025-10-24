@@ -1,0 +1,110 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Min Stack
+
+Design a stack that supports the following operations in **O(1)** time:
+1️⃣ push(x) → Push element x onto stack  
+2️⃣ pop()   → Removes the element on top of the stack  
+3️⃣ top()   → Get the top element  
+4️⃣ getMin() → Retrieve the minimum element in the stack  
+
+Example:
+Input:
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output:
+[null,null,null,null,-3,null,0,-2]
+
+Explanation:
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   // return -3
+minStack.pop();
+minStack.top();      // return 0
+minStack.getMin();   // return -2
+--------------------------------------------------------------------
+✅ Approach: Stack of Pairs
+
+👉 We maintain a stack that stores **pairs**: `{value, current_min}`.
+
+When pushing a value:
+- If the stack is empty → `{val, val}`
+- Else → `{val, min(val, top().second)}`
+
+This ensures every stack frame “remembers” the minimum so far.
+
+When popping:
+- Simply pop the top element.
+
+When getting min:
+- Return `top().second` since it stores the minimum up to that point.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class MinStack {
+public:
+    vector<pair<int, int>> s;
+
+    MinStack() {
+        // Constructor initializes an empty stack
+    }
+
+    void push(int val) {
+        if (s.empty())
+            s.push_back({val, val});
+        else
+            s.push_back({val, min(s.back().second, val)});
+    }
+
+    void pop() {
+        s.pop_back();
+    }
+
+    int top() {
+        return s.back().first;
+    }
+
+    int getMin() {
+        return s.back().second;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Operations:
+push(5) → stack = [(5, 5)]
+push(3) → stack = [(5, 5), (3, 3)]
+push(7) → stack = [(5, 5), (3, 3), (7, 3)]
+push(2) → stack = [(5, 5), (3, 3), (7, 3), (2, 2)]
+getMin() → 2
+pop() → stack = [(5, 5), (3, 3), (7, 3)]
+getMin() → 3
+top() → 7
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- push() → O(1)
+- pop()  → O(1)
+- top()  → O(1)
+- getMin() → O(1)
+
+✅ Space Complexity:
+- O(n) — Each push stores both value and current minimum.
+
+✅ Concepts Used:
+- Stack (LIFO)
+- Pair tracking of min value
+
+✅ Alternate Approaches:
+- Use two separate stacks: one for values, one for minimums.
+  (More readable, but uses extra structure.)
+
+--------------------------------------------------------------------
+*/

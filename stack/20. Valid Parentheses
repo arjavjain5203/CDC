@@ -1,0 +1,109 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Valid Parentheses
+
+You are given a string `s` containing just the characters:
+'(', ')', '{', '}', '[' and ']'.
+
+Your task is to determine if the input string is **valid**.
+
+A string is valid if:
+1️⃣ Open brackets are closed by the same type of brackets.  
+2️⃣ Open brackets are closed in the correct order.  
+
+Example 1:
+Input: s = "()"
+Output: true
+
+Example 2:
+Input: s = "({[]})"
+Output: true
+
+Example 3:
+Input: s = "(]"
+Output: false
+
+--------------------------------------------------------------------
+✅ Approach: Stack-Based Matching
+
+💡 **Core Idea:**
+Use a **stack** to track the most recent unclosed opening brackets.
+
+Steps:
+1️⃣ Traverse each character `ch` in the string.
+2️⃣ If it's an opening bracket → push it onto the stack.
+3️⃣ If it's a closing bracket:
+   - If the stack is empty → invalid.
+   - If the top element doesn’t match the correct opening bracket → invalid.
+   - Else, pop the top of the stack.
+4️⃣ After traversal, if the stack is empty → valid parentheses.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> st;
+
+        for (char ch : s) {
+            // Step 1: Push opening brackets
+            if (ch == '(' || ch == '[' || ch == '{') {
+                st.push(ch);
+            } 
+            // Step 2: Handle closing brackets
+            else {
+                if (st.empty()) return false;
+
+                // Check for matching pair
+                if ((ch == ')' && st.top() != '(') ||
+                    (ch == ']' && st.top() != '[') ||
+                    (ch == '}' && st.top() != '{'))
+                    return false;
+
+                // If matched, pop the opening bracket
+                st.pop();
+            }
+        }
+
+        // Step 3: Ensure all brackets are closed
+        return st.empty();
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input: s = "{[()]}"
+
+Step-by-step:
+- Push '{' → stack = ['{']
+- Push '[' → stack = ['{', '[']
+- Push '(' → stack = ['{', '[', '(']
+- Found ')' → pop '(' → stack = ['{', '[']
+- Found ']' → pop '[' → stack = ['{']
+- Found '}' → pop '{' → stack = []
+
+Final stack = empty → ✅ Valid
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n) — Each character is pushed or popped once.
+
+✅ Space Complexity:
+O(n) — In the worst case (all opening brackets).
+
+✅ Concepts Used:
+- Stack (LIFO)
+- Matching pair validation
+- Edge case handling (empty stack, mismatch)
+
+✅ Edge Cases:
+- s = "" → true (empty string is valid)
+- s = "([)]" → false (incorrect nesting)
+- s = "(((((" → false (unclosed brackets)
+
+--------------------------------------------------------------------
+*/
