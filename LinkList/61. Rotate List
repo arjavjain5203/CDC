@@ -1,0 +1,91 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Rotate List
+
+You are given the head of a linked list and an integer k.  
+Rotate the list to the right by k places and return its head.
+
+Example:
+Input:
+head = [1, 2, 3, 4, 5], k = 2
+
+Output:
+[4, 5, 1, 2, 3]
+--------------------------------------------------------------------
+✅ Approach: Circular Connection + Modulo Trick
+
+1️⃣ **Find the length** of the linked list and the last node (tail).  
+2️⃣ **Connect** the last node to the head — making the list circular.  
+3️⃣ **Reduce unnecessary rotations** using `k = k % length`.  
+4️⃣ **Find the new tail** at position `(length - k - 1)` and the **new head** at `(length - k)`.  
+5️⃣ **Break the circle** by setting `newTail->next = nullptr`.  
+6️⃣ **Return the new head**.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (!head || !head->next || k == 0) return head;
+
+        // Step 1: Find length and last node
+        ListNode* tail = head;
+        int length = 1;
+        while (tail->next) {
+            tail = tail->next;
+            length++;
+        }
+
+        // Step 2: Make list circular
+        tail->next = head;
+
+        // Step 3: Optimize k
+        k %= length;
+        if (k == 0) {
+            tail->next = nullptr;
+            return head;
+        }
+
+        // Step 4: Find new tail (length - k - 1 steps ahead)
+        ListNode* newTail = head;
+        for (int i = 1; i < length - k; i++) {
+            newTail = newTail->next;
+        }
+
+        // Step 5: New head is next of newTail
+        ListNode* newHead = newTail->next;
+
+        // Step 6: Break the link
+        newTail->next = nullptr;
+
+        return newHead;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+head = [1 → 2 → 3 → 4 → 5], k = 2  
+Step 1: length = 5  
+Step 2: Make circular → 1→2→3→4→5→(back to 1)  
+Step 3: k = 2 % 5 = 2  
+Step 4: Move (5 - 2 - 1) = 2 steps → newTail = node(3)  
+Step 5: newHead = node(4), break link  
+
+Result → 4 → 5 → 1 → 2 → 3  
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - Single traversal to find length and one to find new head.
+
+✅ Space Complexity: O(1)
+   - Uses constant extra space (only pointers).
+
+✅ Alternative:
+   - Could reverse parts of the list and join, but this approach is cleaner.
+
+--------------------------------------------------------------------
+*/

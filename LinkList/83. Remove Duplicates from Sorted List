@@ -1,0 +1,82 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Remove Duplicates from Sorted Linked List
+
+Given the head of a **sorted linked list**, delete all duplicates such that each element 
+appears only once. Return the linked list sorted as well.
+
+Example:
+Input:
+head = [1, 1, 2, 3, 3]
+
+Output:
+[1, 2, 3]
+--------------------------------------------------------------------
+✅ Approach: Single Pass (Pointer Manipulation)
+
+1️⃣ If the list is empty or has one node, return it directly.
+
+2️⃣ Use a pointer `curr` to traverse the list:
+   - If `curr->val == curr->next->val`, skip the duplicate node by linking
+     `curr->next = curr->next->next`.
+   - Otherwise, move `curr` forward.
+
+3️⃣ Continue until `curr` reaches the end.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) return head;
+
+        ListNode* curr = head;
+
+        while (curr && curr->next) {
+            if (curr->val == curr->next->val) {
+                // Remove duplicate node
+                ListNode* temp = curr->next;
+                curr->next = curr->next->next;
+                delete temp; // Free memory (C++ style)
+            } else {
+                curr = curr->next;
+            }
+        }
+
+        return head;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:  head = 1 → 1 → 2 → 3 → 3
+
+Step 1: curr = 1  
+         Duplicate found → remove 2nd “1”  
+         List becomes: 1 → 2 → 3 → 3  
+
+Step 2: curr = 2  
+         No duplicate → move ahead  
+
+Step 3: curr = 3  
+         Duplicate found → remove 2nd “3”  
+         List becomes: 1 → 2 → 3  
+
+Output → 1 → 2 → 3  
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - Traverses each node once.
+
+✅ Space Complexity: O(1)
+   - Only uses a few pointer variables.
+
+✅ Alternative:
+   - Recursive version possible but adds call stack overhead (O(n)).
+
+--------------------------------------------------------------------
+*/

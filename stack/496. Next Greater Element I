@@ -1,0 +1,108 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Next Greater Element I
+
+You are given two integer arrays, `nums1` and `nums2`, 
+where `nums1` is a subset of `nums2`.
+
+For each element in `nums1`, find the **next greater element** in `nums2`:
+- The next greater element for an element `x` is the **first element** 
+  to the right of `x` in `nums2` that is **greater than `x`**.
+- If no such element exists, return `-1`.
+
+Example:
+Input:
+nums1 = [4,1,2]
+nums2 = [1,3,4,2]
+
+Output:
+[-1,3,-1]
+
+Explanation:
+- For 4 → No greater element to its right → -1  
+- For 1 → Next greater is 3  
+- For 2 → No greater element → -1
+--------------------------------------------------------------------
+✅ Approach: Monotonic Stack + Hash Map
+
+1️⃣ Traverse `nums2` **from left to right**.
+
+2️⃣ Maintain a **monotonic decreasing stack**:
+   - While stack is not empty and `num > stack.top()`,
+     it means `num` is the next greater element for `stack.top()`.
+     → Pop the top and record this mapping in a hash map.
+
+3️⃣ After the loop:
+   - Elements left in the stack have no next greater elements.
+
+4️⃣ For each element in `nums1`, check in the map:
+   - If present → append the mapped value
+   - If not → append `-1`
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> ans;
+        stack<int> st;
+        unordered_map<int, int> nextGreater;
+
+        // Step 1: Build mapping of next greater elements for nums2
+        for (int num : nums2) {
+            while (!st.empty() && st.top() < num) {
+                nextGreater[st.top()] = num;
+                st.pop();
+            }
+            st.push(num);
+        }
+
+        // Step 2: Build result for nums1 using the map
+        for (int num : nums1) {
+            ans.push_back(nextGreater.find(num) == nextGreater.end() ? -1 : nextGreater[num]);
+        }
+
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+nums1 = [2, 4]
+nums2 = [1, 2, 3, 4]
+
+Step 1: Build map using stack
+Stack: []
+→ num = 1 → push [1]
+→ num = 2 → 1 < 2 → map[1] = 2, push [2]
+→ num = 3 → 2 < 3 → map[2] = 3, push [3]
+→ num = 4 → 3 < 4 → map[3] = 4, push [4]
+
+nextGreater = { 1→2, 2→3, 3→4 }
+
+Step 2: Build ans
+→ 2 → nextGreater[2] = 3
+→ 4 → not found → -1
+
+Output: [3, -1]
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n + m)
+   - Each element pushed and popped once from stack.
+
+✅ Space Complexity: O(n)
+   - Hash map and stack store up to n elements.
+
+✅ Concepts Used:
+   - Monotonic Decreasing Stack
+   - Hash Map for O(1) lookups
+
+✅ Alternate:
+   - Can use a reverse traversal version (right-to-left).
+
+--------------------------------------------------------------------
+*/

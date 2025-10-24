@@ -1,0 +1,115 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Reverse a String using Stack (Array Implementation)
+
+You are given a string `S`.  
+Your task is to reverse the string **using a stack**, without using any 
+in-built reverse functions.
+
+Example:
+Input:  "Hello, World!"
+Output: "!dlroW ,olleH"
+--------------------------------------------------------------------
+✅ Approach: Stack-Based Reversal
+
+1️⃣ Use a **character array as a stack** to store each character of the string.
+
+2️⃣ Push every character of the string onto the stack.
+
+3️⃣ Pop characters one by one from the stack and append them to a new string.
+   - Since stack follows **LIFO (Last In, First Out)** order,
+     the popped characters will form the reversed string.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define STACK_MAX_SIZE 101
+char stackArray[STACK_MAX_SIZE];
+int stackTop = -1;
+
+// 🔹 Check if stack is empty
+bool isStackEmpty() {
+    return stackTop == -1;
+}
+
+// 🔹 Check if stack is full
+bool isStackFull() {
+    return stackTop >= STACK_MAX_SIZE - 1;
+}
+
+// 🔹 Push element onto stack
+void pushToStack(char element) {
+    if (isStackFull()) {
+        cout << "Stack is full\n";
+        return;
+    }
+    stackArray[++stackTop] = element;
+}
+
+// 🔹 Pop element from stack
+char popFromStack() {
+    if (isStackEmpty()) {
+        cout << "Stack is empty\n";
+        return -1;
+    }
+    return stackArray[stackTop--];
+}
+
+// 🔹 Main function to reverse a string using stack
+int main() {
+    string inputString = "Hello, World!";
+    int inputLength = inputString.length();
+
+    // Push each character of the string onto the stack
+    for (int i = 0; i < inputLength; i++) {
+        pushToStack(inputString[i]);
+    }
+
+    // Pop characters to form the reversed string
+    string reversedString;
+    while (!isStackEmpty()) {
+        reversedString.push_back(popFromStack());
+    }
+
+    cout << reversedString << "\n";
+    return 0;
+}
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input: "Hello"
+
+Step 1 → Push all chars: ['H', 'e', 'l', 'l', 'o']
+Stack Top → 'o'
+
+Step 2 → Pop elements:
+  Pop 'o' → "o"
+  Pop 'l' → "ol"
+  Pop 'l' → "oll"
+  Pop 'e' → "olle"
+  Pop 'H' → "olleH"
+
+Output → "olleH"
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+   - Each character is pushed and popped exactly once.
+
+✅ Space Complexity: O(n)
+   - Stack stores all characters of the input string.
+
+✅ Concepts Used:
+   - Stack (LIFO principle)
+   - Array-based stack implementation
+
+✅ Alternative:
+   - Can use STL `stack<char>` or `reverse()` function for simplicity.
+
+--------------------------------------------------------------------
+*/
