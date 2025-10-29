@@ -1,0 +1,88 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: First Bad Version
+
+You are a product manager and currently leading a team to develop a new product.  
+Unfortunately, the latest version of your product fails the quality check.  
+
+Since each version is developed based on the previous one,  
+**all versions after a bad version are also bad.**
+
+You are given an API:
+    bool isBadVersion(int version);
+
+Implement a function to find the **first bad version**.
+
+--------------------------------------------------------------------
+Example:
+Input: n = 5, bad = 4  
+Output: 4  
+Explanation:
+isBadVersion(3) → false  
+isBadVersion(4) → true  
+→ The first bad version is 4.
+
+--------------------------------------------------------------------
+✅ Approach: Binary Search (Efficient)
+
+💡 **Idea:**
+- Use binary search between versions `1` and `n`.
+- If `mid` is bad, the first bad version must be **mid or before it** → move `high` left.
+- If `mid` is not bad, the first bad version must be **after it** → move `low` right.
+- Continue until `low` passes `high`.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+// The API isBadVersion is defined for you.
+// bool isBadVersion(int version);
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int low = 1, high = n;
+        int ans = n;  // store the potential first bad version
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (isBadVersion(mid)) {
+                ans = mid;        // mid might be the first bad version
+                high = mid - 1;   // check earlier versions
+            } else {
+                low = mid + 1;    // check later versions
+            }
+        }
+
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+n = 5, bad = 4
+
+low = 1, high = 5  
+mid = 3 → not bad → move right (low = 4)
+mid = 4 → bad → possible answer = 4 → move left (high = 3)
+→ loop ends, return 4
+
+Output: 4
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(log n)
+✅ Space Complexity: O(1)
+
+✅ Concept Used:
+- Binary Search
+- Range narrowing to find the earliest true condition
+
+✅ Edge Cases:
+- First version itself is bad (bad = 1)
+- All versions are good (shouldn’t happen as per problem)
+- Only one version (n = 1)
+
+--------------------------------------------------------------------
+*/
