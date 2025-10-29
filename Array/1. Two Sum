@@ -1,0 +1,97 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Two Sum
+
+Given an array of integers `nums` and an integer `target`,  
+return the **indices of the two numbers** such that they add up to `target`.
+
+You may assume that each input has **exactly one solution**,  
+and you may not use the same element twice.
+
+Return the answer in **any order**.
+
+--------------------------------------------------------------------
+Example:
+Input:  nums = [2, 7, 11, 15], target = 9  
+Output: [1, 0]
+
+Explanation:  
+nums[1] + nums[0] = 7 + 2 = 9
+
+--------------------------------------------------------------------
+✅ Approach: Hash Map (One-Pass)
+
+💡 **Idea:**
+Use a hash map to store each element’s **value → index** as we iterate.
+
+For each `nums[i]`:
+1️⃣ Compute its **complement** = `target - nums[i]`.  
+2️⃣ If complement exists in the map → return indices `[i, seen[complement]]`.  
+3️⃣ Otherwise, store the current element in the map.
+
+This approach ensures we find the pair in **one traversal**.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> seen;  // value → index map
+
+        for (int i = 0; i < nums.size(); i++) {
+            int complement = target - nums[i];
+
+            // Check if complement already exists in map
+            if (seen.find(complement) != seen.end()) {
+                // Found the pair → return indices
+                return vector<int>{i, seen[complement]};
+            }
+
+            // Store current element and its index
+            seen[nums[i]] = i;
+        }
+
+        // No valid pair found (should not happen per problem constraints)
+        return {};
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+nums = [2, 7, 11, 15], target = 9
+
+Iteration:
+i=0 → nums[i]=2 → complement=7 → not found → store (2,0)
+i=1 → nums[i]=7 → complement=2 → found in map → return [1,0]
+
+Output → [1, 0]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n)  
+→ Each element is processed once (hash map lookup is O(1) on average).
+
+✅ Space Complexity:
+O(n)  
+→ Hash map may store up to `n` elements.
+
+✅ Concept Used:
+- Hashing
+- Complement search for sum pairs
+
+✅ Edge Cases:
+- Negative numbers (handled)
+- Large values (no overflow as long as within int range)
+- Exactly one valid pair guaranteed
+
+--------------------------------------------------------------------
+*/

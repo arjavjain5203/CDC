@@ -1,0 +1,138 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Count Valid Selections
+
+You are given an integer array `nums`.  
+You can start at any index `i` where `nums[i] == 0`,  
+and move either **right** or **left**, following these rules:
+
+1️⃣ If the current number is **0**, move one step in the current direction.  
+2️⃣ If the current number is **> 0**,  
+   - Decrease it by 1  
+   - Reverse the direction (left ↔ right)  
+   - Move one step in the new direction  
+3️⃣ The goal is to **reduce all numbers in the array to 0** and end **outside the array bounds**.
+
+Return the number of starting positions (and directions) that lead to a valid sequence.
+
+--------------------------------------------------------------------
+Example:
+
+Input:
+nums = [2, 0, 1, 0]
+
+Output:
+2
+
+Explanation:
+Possible valid selections:
+- Start at index 1 (0) → move right → reduces all to 0
+- Start at index 3 (0) → move left  → reduces all to 0
+
+--------------------------------------------------------------------
+✅ Approach: Recursive Simulation + Direction Toggle
+
+💡 **Idea:**
+We simulate the described process recursively.  
+From each position with value `0`, we try **two directions**:
+- Move **right** (`direc = true`)
+- Move **left** (`direc = false`)
+
+At each recursive step:
+- If index goes **out of bounds**, check if all elements are `0`.  
+- If `nums[curr] == 0`, continue in the same direction.  
+- Else, decrement `nums[curr]`, reverse direction, and move one step.
+
+Count how many of these attempts lead to all zeros.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    // Helper function to simulate movement
+    bool helper(vector<int>& nums, int curr, bool direc) {
+        // Base case: if out of bounds, check if all nums are zero
+        if (curr >= nums.size() || curr < 0) {
+            for (int x : nums)
+                if (x != 0)
+                    return false;
+            return true;
+        }
+
+        int step = direc ? 1 : -1; // right = +1, left = -1
+
+        if (nums[curr] == 0) {
+            // Continue in the same direction
+            return helper(nums, curr + step, direc);
+        } else {
+            // Decrement current, flip direction
+            nums[curr]--;
+            return helper(nums, curr - step, !direc);
+        }
+    }
+
+    // Count how many valid start positions exist
+    int countValidSelections(vector<int>& nums) {
+        int count = 0;
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == 0) {
+                vector<int> temp = nums;
+
+                // Try moving right
+                bool right = helper(temp, i, true);
+                if (right) count++;
+
+                // Reset array and try moving left
+                temp = nums;
+                bool left = helper(temp, i, false);
+                if (left) count++;
+            }
+        }
+
+        return count;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input: nums = [2, 0, 1, 0]
+
+- Start at i = 0 → not 0 → skip
+- Start at i = 1 → 0
+  → move right → [2,0,1,0]
+    → index = 2 → nums[2]=1 → decrement → reverse direction → move left
+    → index = 1 → nums[1]=0 → move left
+    → index = 0 → nums[0]=2 → decrement → reverse → move right
+    ... eventually all zeros ✅
+
+Similarly for i = 3 moving left ✅
+
+Result → 2 valid selections.
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n²) — each recursive simulation may visit up to all elements.
+
+✅ Space Complexity:
+O(n) — for recursive stack and temporary array copies.
+
+✅ Concepts Used:
+- Recursion and backtracking
+- Direction control (left/right toggle)
+- Simulation-based validation
+
+✅ Edge Cases:
+- All zeros → every zero can lead to 2 valid paths (both directions)
+- No zero → result = 0
+- Single element array → check correctly for out-of-bounds end condition
+
+--------------------------------------------------------------------
+*/

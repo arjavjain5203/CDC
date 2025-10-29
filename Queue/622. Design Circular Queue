@@ -1,0 +1,162 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Design Circular Queue
+
+Design a circular queue using an array.  
+You must implement the following operations:
+
+- `enQueue(value)` → Inserts an element into the circular queue. Returns true if successful.
+- `deQueue()` → Deletes an element from the circular queue. Returns true if successful.
+- `Front()` → Gets the front item. Returns -1 if the queue is empty.
+- `Rear()` → Gets the last item. Returns -1 if the queue is empty.
+- `isEmpty()` → Checks whether the queue is empty.
+- `isFull()` → Checks whether the queue is full.
+
+--------------------------------------------------------------------
+Example:
+Input:
+MyCircularQueue q(3);
+q.enQueue(1);   // return true
+q.enQueue(2);   // return true
+q.enQueue(3);   // return true
+q.enQueue(4);   // return false (full)
+q.Rear();       // return 3
+q.isFull();     // return true
+q.deQueue();    // return true
+q.enQueue(4);   // return true
+q.Rear();       // return 4
+
+Output:
+true true true false 3 true true true 4
+
+--------------------------------------------------------------------
+✅ Approach: Circular Array + Modular Arithmetic
+
+💡 **Idea:**
+We simulate a queue using a fixed-size array, but when the rear reaches the end,  
+we wrap around to the beginning using modular arithmetic:
+`index = (index + 1) % size`
+
+Maintain two pointers:
+- `front`: index of the first element  
+- `rear`: index of the last element
+
+Empty condition → `front == -1`  
+Full condition → `(rear + 1) % size == front`
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+using namespace std;
+
+class MyCircularQueue {
+public:
+    int size;
+    vector<int> arr;
+    int rear;
+    int front;
+
+    MyCircularQueue(int k) {
+        size = k;
+        arr.resize(k);
+        rear = -1;
+        front = -1;
+    }
+
+    // Insert element into circular queue
+    bool enQueue(int value) {
+        if (isFull())
+            return false;
+
+        if (isEmpty()) {
+            rear = 0;
+            front = 0;
+        } else {
+            rear = (rear + 1) % size;
+        }
+
+        arr[rear] = value;
+        return true;
+    }
+
+    // Delete element from circular queue
+    bool deQueue() {
+        if (isEmpty())
+            return false;
+
+        if (front == rear) {
+            // Queue becomes empty
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % size;
+        }
+
+        return true;
+    }
+
+    // Get the front element
+    int Front() {
+        if (isEmpty())
+            return -1;
+        return arr[front];
+    }
+
+    // Get the last (rear) element
+    int Rear() {
+        if (isEmpty())
+            return -1;
+        return arr[rear];
+    }
+
+    // Check if the queue is empty
+    bool isEmpty() {
+        return front == -1;
+    }
+
+    // Check if the queue is full
+    bool isFull() {
+        return ((rear + 1) % size) == front;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+MyCircularQueue q(3);
+q.enQueue(1); → [1, _, _] front=0 rear=0
+q.enQueue(2); → [1,2,_]  front=0 rear=1
+q.enQueue(3); → [1,2,3]  front=0 rear=2
+q.isFull();   → true
+q.deQueue();  → removes 1 → [_,2,3] front=1 rear=2
+q.enQueue(4); → [4,2,3] (wraps around) front=1 rear=0
+q.Rear();     → 4
+
+Output:
+true true true true false 3 true true 4
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- enQueue() → O(1)
+- deQueue() → O(1)
+- Front(), Rear(), isEmpty(), isFull() → O(1)
+
+✅ Space Complexity:
+O(k) — for storing up to k elements.
+
+✅ Concept Used:
+- Circular Queue using Array
+- Modular arithmetic for wrapping indices
+- Efficient O(1) queue operations
+
+✅ Edge Cases:
+- Queue full condition → `(rear + 1) % size == front`
+- Queue empty condition → `front == -1`
+- Properly reset indices when queue becomes empty
+
+--------------------------------------------------------------------
+*/

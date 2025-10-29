@@ -1,0 +1,92 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Merge Sorted Array
+
+You are given two sorted integer arrays `nums1` and `nums2`, 
+and two integers `m` and `n` representing the number of elements 
+in `nums1` and `nums2` respectively.
+
+The task is to merge `nums2` into `nums1` as one sorted array.
+
+Note:
+- nums1 has enough space (size m + n) to hold additional elements from nums2.
+
+--------------------------------------------------------------------
+Example:
+Input:
+nums1 = [1,2,3,0,0,0], m = 3
+nums2 = [2,5,6],       n = 3
+
+Output:
+nums1 = [1,2,2,3,5,6]
+
+--------------------------------------------------------------------
+✅ Approach: Merge Using Two Pointers (Similar to Merge Sort)
+
+💡 **Idea:**
+- Maintain two pointers `i` (for nums1) and `j` (for nums2).
+- Compare elements and push the smaller one into a temporary array.
+- After one array is exhausted, copy the remaining elements from the other.
+- Finally, overwrite the first `m + n` elements of `nums1`.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int ans[1000]; // temporary array to hold merged elements
+        int i = 0, j = 0, k = 0;
+
+        // Merge elements from both arrays in sorted order
+        while (i < m && j < n) {
+            if (nums1[i] <= nums2[j])
+                ans[k++] = nums1[i++];
+            else
+                ans[k++] = nums2[j++];
+        }
+
+        // Copy remaining elements from nums1 (if any)
+        while (i < m)
+            ans[k++] = nums1[i++];
+
+        // Copy remaining elements from nums2 (if any)
+        while (j < n)
+            ans[k++] = nums2[j++];
+
+        // Copy back to nums1
+        for (int p = 0; p < k; p++)
+            nums1[p] = ans[p];
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+nums1 = [1,2,3,0,0,0], m = 3  
+nums2 = [2,5,6], n = 3  
+
+→ Compare 1 & 2 → pick 1  
+→ Compare 2 & 2 → pick 2  
+→ Compare 2 & 3 → pick 2  
+→ Continue merging...
+
+Final merged array: [1,2,2,3,5,6]
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(m + n)
+✅ Space Complexity: O(m + n) (due to extra temporary array)
+
+✅ Concept Used:
+- Two-pointer merging (similar to merge sort’s merge step)
+
+✅ Optimization:
+You can reduce space to O(1) by merging in reverse (from the end of nums1).
+
+--------------------------------------------------------------------
+*/

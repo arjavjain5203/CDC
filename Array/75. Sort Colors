@@ -1,0 +1,101 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Sort Colors (Dutch National Flag Problem)
+
+You are given an array `nums` containing `n` objects colored red, white, or blue,  
+where:
+- 0 → red  
+- 1 → white  
+- 2 → blue  
+
+Sort the array **in-place** so that objects of the same color are adjacent,  
+with the colors in the order **red → white → blue**.
+
+--------------------------------------------------------------------
+Example:
+Input:  nums = [2, 0, 2, 1, 1, 0]  
+Output: [0, 0, 1, 1, 2, 2]
+
+Explanation:
+All 0s (red) come first, followed by 1s (white), then 2s (blue).
+
+--------------------------------------------------------------------
+✅ Approach: Dutch National Flag Algorithm (Three Pointers)
+
+💡 **Idea:**
+We maintain three regions in the array using pointers:
+- `i` → boundary for 0s (start of array)
+- `j` → current element being checked
+- `k` → boundary for 2s (end of array)
+
+We iterate through the array and rearrange elements based on their value:
+1️⃣ If `nums[j] == 0` → swap with `nums[i]`, then increment both `i` and `j`.  
+2️⃣ If `nums[j] == 2` → swap with `nums[k]`, then decrement `k`.  
+3️⃣ If `nums[j] == 1` → just move `j` forward.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int n = nums.size();
+        int i = 0;        // boundary for 0s
+        int j = 0;        // current pointer
+        int k = n - 1;    // boundary for 2s
+
+        while (j <= k) {
+            if (nums[j] == 0) {
+                swap(nums[j], nums[i]);
+                i++;
+                j++;
+            } 
+            else if (nums[j] == 2) {
+                swap(nums[j], nums[k]);
+                k--;
+            } 
+            else { // nums[j] == 1
+                j++;
+            }
+        }
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input: nums = [2, 0, 2, 1, 1, 0]
+
+Initial: i=0, j=0, k=5 → [2, 0, 2, 1, 1, 0]  
+Step 1: nums[j]=2 → swap(j,k) → [0, 0, 2, 1, 1, 2], k=4  
+Step 2: nums[j]=0 → swap(i,j) → [0, 0, 2, 1, 1, 2], i=1, j=1  
+Step 3: nums[j]=0 → swap(i,j) → [0, 0, 2, 1, 1, 2], i=2, j=2  
+Step 4: nums[j]=2 → swap(j,k) → [0, 0, 1, 1, 2, 2], k=3  
+Step 5: nums[j]=1 → j++ → [0, 0, 1, 1, 2, 2]  
+
+Final Output → [0, 0, 1, 1, 2, 2]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n) — Each element is visited at most once.
+
+✅ Space Complexity:
+O(1) — Sorting done in-place.
+
+✅ Concept Used:
+- Three-pointer technique
+- In-place partitioning
+
+✅ Edge Cases:
+- All same elements (e.g., [1,1,1])
+- Already sorted input
+- Reverse sorted input
+
+--------------------------------------------------------------------
+*/

@@ -1,0 +1,159 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Implement Circular Queue
+
+Design a circular queue that supports the following operations:
+- `enqueue(x)` → Insert an element at the rear of the queue.
+- `dequeue()`  → Remove the front element of the queue.
+- `getFront()` → Get the front element.
+- `getRear()`  → Get the rear element.
+- `isEmpty()`  → Check if the queue is empty.
+- `isFull()`   → Check if the queue is full.
+
+--------------------------------------------------------------------
+Example:
+Input:
+myQueue q(5);
+q.enqueue(10);
+q.enqueue(20);
+q.enqueue(30);
+cout << q.getFront() << endl; // 10
+q.dequeue();
+cout << q.getFront() << endl; // 20
+
+Output:
+10
+20
+
+--------------------------------------------------------------------
+✅ Approach: Circular Queue using Array
+
+💡 **Idea:**
+To efficiently utilize space, use a **circular array** instead of shifting elements.
+
+We maintain:
+- `front` → Index of the front element  
+- `rear`  → Index of the last inserted element  
+- `count` → Current number of elements  
+- `capacity` → Total size of the queue  
+
+When inserting (`enqueue`) or removing (`dequeue`),  
+use **modular arithmetic** to wrap around the array:
+rear = (rear + 1) % capacity;
+front = (front + 1) % capacity;
+
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class myQueue {
+public:
+    vector<int> arr;   // Array for storing queue elements
+    int capacity;      // Maximum size of queue
+    int rear;          // Index for rear element
+    int front;         // Index for front element
+    int count;         // Current number of elements
+
+    // Constructor to initialize queue
+    myQueue(int n) {
+        capacity = n;
+        rear = -1;
+        front = -1;
+        count = 0;
+        arr.resize(n);
+    }
+
+    // Check if queue is empty
+    bool isEmpty() {
+        return (count == 0);
+    }
+
+    // Check if queue is full
+    bool isFull() {
+        return (count == capacity);
+    }
+
+    // Enqueue operation (Insert at rear)
+    void enqueue(int x) {
+        if (isFull()) return;
+
+        if (isEmpty()) {
+            front = 0; // first element
+        }
+
+        rear = (rear + 1) % capacity; // move circularly
+        arr[rear] = x;
+        count++;
+    }
+
+    // Dequeue operation (Remove from front)
+    void dequeue() {
+        if (isEmpty()) return;
+
+        front = (front + 1) % capacity;
+        count--;
+
+        // Reset when queue becomes empty
+        if (count == 0) {
+            front = -1;
+            rear = -1;
+        }
+    }
+
+    // Get front element
+    int getFront() {
+        if (isEmpty()) return -1;
+        return arr[front];
+    }
+
+    // Get rear element
+    int getRear() {
+        if (isEmpty()) return -1;
+        return arr[rear];
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Queue capacity = 5
+
+Operations:
+enqueue(10) → front=0, rear=0, arr=[10]
+enqueue(20) → front=0, rear=1, arr=[10,20]
+enqueue(30) → front=0, rear=2, arr=[10,20,30]
+getFront() → 10
+dequeue()  → front moves to 1 → arr=[10,20,30], front=1
+getFront() → 20
+enqueue(40) → rear=3
+enqueue(50) → rear=4
+enqueue(60) → wraps around → rear=(4+1)%5=0, arr[0]=60
+
+Circular Effect → rear wraps to index 0!
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- enqueue(): O(1)
+- dequeue(): O(1)
+- getFront()/getRear(): O(1)
+- isEmpty()/isFull(): O(1)
+
+✅ Space Complexity:
+O(n) → for the array
+
+✅ Concept Used:
+- Circular Array (using modulo arithmetic)
+- Queue Fundamentals (FIFO)
+
+✅ Edge Cases:
+- Enqueue when full → ignored
+- Dequeue when empty → ignored
+- Single element removal → resets queue pointers
+
+--------------------------------------------------------------------
+*/

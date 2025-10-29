@@ -1,0 +1,83 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Container With Most Water
+
+You are given an integer array `height` of length `n`.  
+Each element represents a vertical line at coordinate (i, height[i]).
+
+The task is to find two lines that together with the x-axis form a container,  
+such that the container holds the **maximum amount of water**.
+
+--------------------------------------------------------------------
+Example:
+Input:  height = [1,8,6,2,5,4,8,3,7]
+Output: 49
+
+Explanation:
+The maximum area of water (between lines at indices 1 and 8) is 49 units.
+
+--------------------------------------------------------------------
+✅ Approach: Two-Pointer Technique
+
+💡 **Idea:**
+- Use two pointers `i` (left) and `j` (right).
+- Compute the area between these two lines:
+    `area = min(height[i], height[j]) * (j - i)`
+- Update the maximum area.
+- Move the pointer pointing to the **shorter line**, since increasing width but keeping the shorter line limits the area.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int i = 0, j = height.size() - 1;
+        int maxArea = 0;
+
+        while (i < j) {
+            int minHeight = min(height[i], height[j]);
+            int currArea = minHeight * (j - i);
+            maxArea = max(maxArea, currArea);
+
+            // Move the pointer of the shorter line inward
+            if (height[i] < height[j])
+                i++;
+            else
+                j--;
+        }
+
+        return maxArea;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input: height = [1,8,6,2,5,4,8,3,7]
+Start: i=0, j=8 → area=1*(8)=8 → max=8  
+Next:  move i++ (since 1 < 7)  
+Now:   i=1, j=8 → area=7*(7)=49 → max=49  
+...
+Continue until i>=j  
+Final max area = 49
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+✅ Space Complexity: O(1)
+
+✅ Concepts Used:
+- Two-pointer technique
+- Greedy area maximization
+
+✅ Edge Cases:
+- All heights are the same (e.g., [5,5,5,5])
+- Strictly increasing or decreasing heights
+--------------------------------------------------------------------
+*/
