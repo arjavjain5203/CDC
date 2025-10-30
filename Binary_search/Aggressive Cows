@@ -1,0 +1,118 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Aggressive Cows
+
+You are given `n` stalls and the position of each stall in an array `stalls[]`.
+You have to assign `k` cows to these stalls such that the **minimum distance**
+between any two cows is **maximized**.
+
+--------------------------------------------------------------------
+Example:
+Input:
+stalls = [1, 2, 8, 4, 9], k = 3
+Output: 3
+
+Explanation:
+Possible stall assignments:
+- Place cows at positions [1, 4, 8] → min distance = 3  
+- This is the largest possible minimum distance.
+
+--------------------------------------------------------------------
+✅ Approach: Binary Search on Answer
+
+💡 **Idea:**
+We need to find the **maximum minimum distance** between any two cows.
+
+1️⃣ Sort the stall positions.  
+2️⃣ The minimum possible distance = 1  
+    The maximum possible distance = stalls[n−1] − stalls[0]  
+3️⃣ Apply binary search on this distance (`mid`).  
+   - If it is possible to place all `k` cows with at least `mid` distance → move right.  
+   - Else → move left.
+
+--------------------------------------------------------------------
+✅ Helper Function: `valid()`
+Checks if `k` cows can be placed with at least `mid` distance apart.
+
+Steps:
+- Place the first cow at the first stall.
+- Try placing the next cow at a stall that is ≥ `mid` distance away.
+- Count cows placed.  
+- If we can place all `k` cows → return true.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+
+    // Helper to check if we can place all cows with at least 'mid' distance
+    bool valid(vector<int>& arr, int mid, int k) {
+        int cow = 1;
+        int lastPosition = arr[0];
+
+        for (int i = 1; i < arr.size(); i++) {
+            if (arr[i] - lastPosition >= mid) {
+                cow++;
+                lastPosition = arr[i];
+            }
+            if (cow == k) return true;  // placed all cows
+        }
+
+        return false;
+    }
+
+    // Main function to find maximum minimum distance
+    int aggressiveCows(vector<int>& stalls, int k) {
+        sort(stalls.begin(), stalls.end());
+        int size = stalls.size();
+
+        int start = 1;
+        int end = stalls[size - 1] - stalls[0];
+        int ans = 0;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            if (valid(stalls, mid, k)) {   // feasible, try for bigger distance
+                ans = mid;
+                start = mid + 1;
+            } else {
+                end = mid - 1;  // not feasible, reduce distance
+            }
+        }
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+stalls = [1, 2, 8, 4, 9], k = 3
+Sorted → [1, 2, 4, 8, 9]
+
+start = 1, end = 8
+mid = 4 → not possible
+mid = 2 → possible → ans = 2
+mid = 3 → possible → ans = 3
+
+✅ Output → 3
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- Sorting: O(n log n)
+- Binary Search: O(log(max_distance))
+- Validation per check: O(n)
+Total → **O(n log n + n log(max_distance))**
+
+✅ Space Complexity:
+O(1)
+
+✅ Concept Used:
+- Binary Search on the Answer
+- Greedy placement of cows
+
+--------------------------------------------------------------------
+*/

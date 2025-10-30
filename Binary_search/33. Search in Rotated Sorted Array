@@ -1,0 +1,107 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Search in Rotated Sorted Array
+
+You are given an integer array `nums` that was **originally sorted in ascending order**  
+but then **rotated at some pivot** index `k` (unknown to you).  
+For example:
+nums = [0,1,2,4,5,6,7] → after rotation → [4,5,6,7,0,1,2]
+
+Given a target value, return the **index** if the target exists, otherwise return `-1`.
+
+--------------------------------------------------------------------
+Example:
+Input: nums = [4,5,6,7,0,1,2], target = 0  
+Output: 4
+
+Explanation:
+The array is rotated at index 3, but binary search still works  
+by checking which half is sorted each time.
+
+--------------------------------------------------------------------
+✅ Approach: Modified Binary Search
+
+💡 **Idea:**
+Although the array is rotated, **at least one half (left or right)** is always sorted.
+
+1️⃣ Find `mid = (l + h) / 2`  
+2️⃣ If `nums[mid] == target`, return `mid`.  
+3️⃣ Check if the **left half is sorted** (`nums[l] <= nums[mid]`):
+   - If `target` lies in `[nums[l], nums[mid])`, move left (`h = mid - 1`)
+   - Else move right (`l = mid + 1`)
+4️⃣ Otherwise, the **right half is sorted**:
+   - If `target` lies in `(nums[mid], nums[h]]`, move right (`l = mid + 1`)
+   - Else move left (`h = mid - 1`)
+
+Repeat until the range collapses.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int l = 0, h = nums.size() - 1;
+
+        while (l <= h) {
+            int mid = l + (h - l) / 2;
+
+            // Case 1: Found target
+            if (nums[mid] == target)
+                return mid;
+
+            // Case 2: Left half is sorted
+            if (nums[l] <= nums[mid]) {
+                if (target >= nums[l] && target < nums[mid])
+                    h = mid - 1;  // Target in left half
+                else
+                    l = mid + 1;  // Target in right half
+            } 
+            // Case 3: Right half is sorted
+            else {
+                if (target > nums[mid] && target <= nums[h])
+                    l = mid + 1;  // Target in right half
+                else
+                    h = mid - 1;  // Target in left half
+            }
+        }
+        return -1;  // Not found
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+nums = [4,5,6,7,0,1,2], target = 0
+
+Iteration 1: l=0, h=6, mid=3 → nums[mid]=7
+Left half [4,5,6,7] is sorted, but target not in it → move right (l=4)
+Iteration 2: l=4, h=6, mid=5 → nums[mid]=1
+Left half [0,1] is sorted, target=0 → move left (h=4)
+Iteration 3: l=4, h=4 → mid=4 → nums[mid]=0 ✅ Found
+
+Output: 4
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(log n) — Modified Binary Search
+
+✅ Space Complexity:
+O(1)
+
+✅ Concept Used:
+- Binary Search
+- Rotated Sorted Array properties
+
+✅ Edge Cases:
+- Target not found → return -1
+- Array not rotated (normal binary search case)
+- Duplicate elements not considered (use variant if duplicates allowed)
+
+--------------------------------------------------------------------
+*/

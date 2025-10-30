@@ -1,0 +1,26 @@
+// ✅ Approach: Binary Search (Iterative)
+// The goal is to find the first index 'i' such that arr[i] > target.
+// If no such element exists, return arr.size().
+// Similar to std::upper_bound() in STL.
+
+// 🕒 Time Complexity: O(log n)
+// 🧠 Space Complexity: O(1)
+
+class Solution {
+public:
+    int upperBound(vector<int>& arr, int target) {
+        int n = arr.size();
+        int start = 0, end = n;
+
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+
+            if (arr[mid] <= target)
+                start = mid + 1;  // move right
+            else
+                end = mid;        // move left
+        }
+
+        return start;  // first index where arr[i] > target
+    }
+};

@@ -1,0 +1,98 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Search in Rotated Sorted Array II
+
+You are given an integer array `nums` (which may contain duplicates) 
+that is sorted in ascending order and then rotated at some pivot.
+Determine if the target exists in the array.
+
+--------------------------------------------------------------------
+Example:
+Input: nums = [2,5,6,0,0,1,2], target = 0
+Output: true
+
+Input: nums = [2,5,6,0,0,1,2], target = 3
+Output: false
+
+--------------------------------------------------------------------
+✅ Approach: Modified Binary Search
+
+💡 **Idea:**
+Even though the array is rotated and may contain duplicates,
+we can still apply binary search by checking which half is sorted.
+
+Steps:
+1️⃣ Use two pointers: `start` and `end`.
+2️⃣ Find the middle element `mid`.
+3️⃣ If `nums[mid] == target`, return true.
+4️⃣ Handle duplicates → if `nums[start] == nums[mid] == nums[end]`, 
+   increment `start` and decrement `end`.
+5️⃣ Otherwise, determine which half is sorted:
+   - If left half is sorted → check if target lies there.
+   - Else → search in the right half.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int start = 0, end = nums.size() - 1;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            // Found target
+            if (nums[mid] == target)
+                return true;
+
+            // Handle duplicates
+            if (nums[start] == nums[mid] && nums[mid] == nums[end]) {
+                start++;
+                end--;
+                continue;
+            }
+
+            // Left half is sorted
+            if (nums[start] <= nums[mid]) {
+                if (nums[start] <= target && target < nums[mid])
+                    end = mid - 1;
+                else
+                    start = mid + 1;
+            }
+            // Right half is sorted
+            else {
+                if (nums[mid] < target && target <= nums[end])
+                    start = mid + 1;
+                else
+                    end = mid - 1;
+            }
+        }
+
+        return false;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+nums = [2,5,6,0,0,1,2], target = 0
+
+Iteration 1:
+mid = 3 → nums[mid] = 0 → ✅ found → return true
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(log n) on average, O(n) in worst case (due to duplicates)
+
+✅ Space Complexity:
+O(1) — only pointers used
+
+✅ Concept Used:
+- Modified Binary Search
+- Handling duplicates in rotated array
+
+--------------------------------------------------------------------
+*/

@@ -1,0 +1,117 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Koko Eating Bananas
+
+Koko loves bananas 🍌. There are `n` piles of bananas,  
+where `piles[i]` represents the number of bananas in the i-th pile.  
+
+Koko can decide her **eating speed `k` (bananas/hour)**.  
+Each hour, she chooses one pile and eats **up to k bananas** from it.  
+If the pile has fewer than k bananas, she eats all and waits for the next hour.  
+
+Return the **minimum integer speed `k`** such that she can finish all the bananas in **h hours**.
+
+--------------------------------------------------------------------
+Example:
+Input:
+piles = [3, 6, 7, 11], h = 8  
+Output: 4
+
+Explanation:
+If Koko eats 4 bananas/hour:
+- 3 → 1 hr  
+- 6 → 2 hr  
+- 7 → 2 hr  
+- 11 → 3 hr  
+Total = 8 hours ✅
+
+--------------------------------------------------------------------
+✅ Approach: Binary Search on Answer
+
+💡 **Idea:**
+We need the **smallest eating speed (k)** that allows Koko to finish within `h` hours.
+
+1️⃣ Define a function `totalTime(piles, k)` to calculate  
+   total hours Koko takes at speed `k`.
+
+2️⃣ Use **binary search** between:
+   - `start = 1`  (minimum speed)
+   - `end = max(piles)` (maximum possible speed)
+
+3️⃣ For each mid = (start + end) / 2:
+   - If `totalTime(mid) <= h`, she can eat faster → move left (`end = mid`)
+   - Else → move right (`start = mid + 1`)
+
+4️⃣ Return `start` → the minimum valid speed.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    // Helper function to calculate total hours needed for a given speed
+    int totalTime(vector<int>& piles, int capacity) {
+        int time = 0;
+        for (int bananas : piles) {
+            // ceil(bananas / capacity)
+            time += (bananas + capacity - 1) / capacity;
+        }
+        return time;
+    }
+
+    // Binary Search to find minimum eating speed
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int start = 1;
+        int end = *max_element(piles.begin(), piles.end());
+
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            int curr = totalTime(piles, mid);
+
+            if (curr <= h)
+                end = mid;        // try smaller speed
+            else
+                start = mid + 1;  // need faster eating
+        }
+        return start;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+piles = [3, 6, 7, 11], h = 8
+start = 1, end = 11
+
+mid = 6 → totalTime = 6 hrs ✅ (try smaller)
+mid = 3 → totalTime = 10 hrs ❌ (too slow)
+mid = 4 → totalTime = 8 hrs ✅
+
+Answer = 4 ✅
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- totalTime() → O(n)
+- Binary Search → O(log(max(piles)))
+→ Overall: O(n * log(maxPile))
+
+✅ Space Complexity:
+O(1)
+
+✅ Concept Used:
+- Binary Search on Answer
+- Ceil Division (to compute hours)
+
+✅ Edge Cases:
+- Single pile (direct division)
+- h == number of piles → must eat all in one per hour
+- Large piles values → ensure integer division safety
+
+--------------------------------------------------------------------
+*/

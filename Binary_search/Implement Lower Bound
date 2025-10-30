@@ -1,0 +1,91 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Lower Bound (Binary Search)
+
+Given a **sorted array** `arr[]` and an integer `target`,  
+find the **index of the first element** in `arr` that is **greater than or equal to `target`**.
+
+If all elements are smaller than `target`, return `n` (the array size).  
+If all elements are greater than `target`, return `0`.
+
+--------------------------------------------------------------------
+Example:
+Input:
+arr = [1, 2, 4, 4, 5, 6]
+target = 4
+
+Output: 2
+
+Explanation:
+- The first element ≥ 4 is `arr[2] = 4`.
+--------------------------------------------------------------------
+✅ Approach: Binary Search
+
+💡 **Idea:**
+Use binary search to find the **smallest index** `i` such that:
+arr[i] >= target
+
+📘 Algorithm:
+1️⃣ Initialize `start = 0`, `end = n - 1`.  
+2️⃣ While `start < end`:
+   - Find `mid = start + (end - start) / 2`
+   - If `arr[mid] < target`, search **right half** → `start = mid + 1`
+   - Else, search **left half** → `end = mid`
+3️⃣ When loop ends, `end` will be the **first position ≥ target**.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int lowerBound(vector<int>& arr, int target) {
+        // Handle boundary conditions
+        if (arr[arr.size() - 1] < target) return arr.size();  // all smaller
+        if (arr[0] >= target) return 0;                       // all larger or equal
+
+        int start = 0, end = arr.size() - 1;
+
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+
+            if (arr[mid] < target)
+                start = mid + 1;   // move right
+            else
+                end = mid;         // move left
+        }
+
+        return end;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+arr = [1, 2, 4, 4, 5, 6], target = 4
+
+start = 0, end = 5
+mid = 2 → arr[2] = 4 → end = 2
+start = 0, end = 2
+mid = 1 → arr[1] = 2 < 4 → start = 2
+✅ start == end == 2 → return 2
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(log n)
+✅ Space Complexity: O(1)
+
+✅ Concept Used:
+- Binary Search (modified)
+- Edge case handling for boundaries
+
+✅ Edge Cases:
+- target smaller than all → return 0
+- target larger than all → return n
+- duplicates → returns first occurrence of ≥ target
+
+--------------------------------------------------------------------
+*/
