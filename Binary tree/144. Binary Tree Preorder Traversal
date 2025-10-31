@@ -1,0 +1,102 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Binary Tree Preorder Traversal (LeetCode #144)
+
+Given the root of a binary tree, return the **preorder traversal** of its nodes' values.
+
+🧩 Preorder Traversal Order:
+→ Visit Root  
+→ Traverse Left Subtree  
+→ Traverse Right Subtree
+
+--------------------------------------------------------------------
+Example:
+Input:
+    1
+     \
+      2
+     /
+    3
+
+Output: [1, 2, 3]
+
+Explanation:
+- Visit 1 (root)
+- Go right → 2
+- Go left of 2 → 3
+
+--------------------------------------------------------------------
+✅ Approach: Recursive DFS (Preorder)
+
+💡 **Idea:**
+Use recursion to traverse:
+1️⃣ Visit the current node (add value to `ans`).  
+2️⃣ Recursively visit the left subtree.  
+3️⃣ Recursively visit the right subtree.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    // Helper function for recursive traversal
+    void helper(TreeNode* root, vector<int>& ans) {
+        if (root == NULL) return;
+
+        ans.push_back(root->val);      // Step 1: Visit root
+        helper(root->left, ans);       // Step 2: Traverse left
+        helper(root->right, ans);      // Step 3: Traverse right
+    }
+
+    // Main function
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        helper(root, ans);
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input Tree:
+      1
+       \
+        2
+       /
+      3
+
+Call Stack:
+helper(1) → ans = [1]
+ → helper(2) → ans = [1, 2]
+   → helper(3) → ans = [1, 2, 3]
+
+Output → [1, 2, 3]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — each node is visited once
+
+✅ Space Complexity:
+O(H) — recursion stack, where H = height of the tree  
+(in worst case H = N for a skewed tree)
+
+✅ Concept Used:
+- Depth First Search (DFS)
+- Preorder Traversal (Root → Left → Right)
+
+--------------------------------------------------------------------
+*/

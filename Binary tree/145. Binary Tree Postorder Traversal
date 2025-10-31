@@ -1,0 +1,111 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Binary Tree Postorder Traversal (LeetCode #145)
+
+Given the root of a binary tree, return the **postorder traversal** of its nodes' values.
+
+🧩 Postorder Traversal Order:
+→ Traverse Left Subtree  
+→ Traverse Right Subtree  
+→ Visit Root Node
+
+--------------------------------------------------------------------
+Example:
+Input:
+    1
+     \
+      2
+     /
+    3
+
+Output: [3, 2, 1]
+
+Explanation:
+- Go left of 1 → None  
+- Go right → 2  
+  - Go left → 3  
+  - Visit 3  
+  - Visit 2  
+- Visit 1  
+
+--------------------------------------------------------------------
+✅ Approach: Recursive DFS (Postorder)
+
+💡 **Idea:**
+Use recursion to traverse the tree in **Left → Right → Root** order:
+1️⃣ Recursively call left subtree.  
+2️⃣ Recursively call right subtree.  
+3️⃣ Add current node value.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+
+    // Helper function for recursive postorder traversal
+    void helper(TreeNode* root, vector<int> &ans)
+    {
+        if (root == NULL)
+            return;
+
+        helper(root->left, ans);   // Step 1: Traverse left subtree
+        helper(root->right, ans);  // Step 2: Traverse right subtree
+        ans.push_back(root->val);  // Step 3: Visit root node
+    }
+
+    // Main function
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ans;
+        helper(root, ans);
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input Tree:
+      1
+       \
+        2
+       /
+      3
+
+Call Sequence:
+helper(1)
+ → helper(2)
+   → helper(3)
+     → ans = [3]
+   → ans = [3, 2]
+ → ans = [3, 2, 1]
+
+Output → [3, 2, 1]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — each node is visited exactly once
+
+✅ Space Complexity:
+O(H) — recursion stack, where H = height of the tree  
+(in worst case, H = N for a skewed tree)
+
+✅ Concept Used:
+- Depth First Search (DFS)
+- Postorder Traversal (Left → Right → Root)
+
+--------------------------------------------------------------------
+*/

@@ -1,0 +1,97 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Path Sum (LeetCode #112)
+
+Given the `root` of a binary tree and an integer `targetSum`,
+return `true` if the tree has a **root-to-leaf path** such that
+adding up all the values along the path equals `targetSum`.
+
+A **leaf** is a node with no children.
+
+--------------------------------------------------------------------
+Example:
+Input:
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \      \
+7    2      1
+
+targetSum = 22
+
+Output: true  
+Explanation: Path → 5 → 4 → 11 → 2 = 22
+
+--------------------------------------------------------------------
+✅ Approach: DFS (Recursive Traversal)
+
+💡 **Idea:**
+We traverse the tree using Depth-First Search, maintaining a
+running sum of the path.
+
+- When reaching a leaf node, check if `sum + node->val == targetSum`.
+- Return `true` as soon as a valid path is found.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    // Helper function for recursive DFS
+    bool helper(TreeNode* root, int targetSum, int sum) {
+        // Base case: if leaf node
+        if (root->left == NULL && root->right == NULL)
+            return (sum + root->val == targetSum);
+
+        // Add current node’s value to running sum
+        sum += root->val;
+
+        // Recur on left and right subtrees
+        if (root->left && helper(root->left, targetSum, sum))
+            return true;
+
+        if (root->right && helper(root->right, targetSum, sum))
+            return true;
+
+        return false;
+    }
+
+    // Main function
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (root == NULL)
+            return false;
+        return helper(root, targetSum, 0);
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Tree:
+    5
+   / \
+  4   8
+ /   / \
+11  13  4
+/  \      \
+7   2      1
+targetSum = 22
+
+→ Path checked: 5→4→11→2 = 22 ✅  
+Return true.
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — each node visited once.
+
+✅ Space Complexity:
+O(H) — recursion stack (height of tree).
+
+✅ Concepts Used:
+- Depth-First Search (DFS)
+- Backtracking
+--------------------------------------------------------------------

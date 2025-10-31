@@ -1,0 +1,80 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Same Tree (LeetCode #100)
+
+Given the roots of two binary trees `p` and `q`, write a function
+to check if they are identical.
+
+Two binary trees are considered the same if they are structurally identical
+and the nodes have the same values.
+
+--------------------------------------------------------------------
+Example:
+
+Input:
+p:      1          q:      1
+       / \                / \
+      2   3              2   3
+
+Output: true
+
+--------------------------------------------------------------------
+✅ Approach: Recursive DFS
+
+💡 **Idea:**
+- If both nodes are NULL → trees are same (base case)
+- If one is NULL and other isn’t → not same
+- If both nodes are non-NULL:
+  - Their values must be equal
+  - Their left subtrees must be same
+  - Their right subtrees must be same
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        // Base case: both are null → identical
+        if (p == NULL && q == NULL)
+            return true;
+
+        // One null and other not → not identical
+        if (p == NULL || q == NULL)
+            return false;
+
+        // Check current node value and recurse left/right
+        if (p->val != q->val)
+            return false;
+
+        // Recursively check left and right subtrees
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+p:      1          q:      1
+       / \                / \
+      2   3              2   3
+
+Step 1: Compare (1, 1) → equal  
+→ Recurse left: (2, 2) → equal → both NULL below → true  
+→ Recurse right: (3, 3) → equal → both NULL below → true  
+→ Final result = true ✅
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — Each node is visited once.
+
+✅ Space Complexity:
+O(H) — Recursive call stack (H = height of the tree).
+
+✅ Concepts Used:
+- Recursion
+- Depth-First Search (DFS)
+--------------------------------------------------------------------
+*/

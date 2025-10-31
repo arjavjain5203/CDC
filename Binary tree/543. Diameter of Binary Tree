@@ -1,0 +1,88 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Diameter of Binary Tree (LeetCode #543)
+
+Given the root of a binary tree, return the **length of the longest path**
+between any two nodes in the tree.
+
+⚠️ The path length is measured by the number of edges, not nodes.
+
+--------------------------------------------------------------------
+Example:
+Input:
+       1
+      / \
+     2   3
+    / \     
+   4   5    
+
+Output: 3
+Explanation: The longest path is [4 → 2 → 1 → 3] with 3 edges.
+
+--------------------------------------------------------------------
+✅ Approach: Recursive Depth Calculation (DFS)
+
+💡 **Idea:**
+- The **diameter** of a node = `leftHeight + rightHeight`.
+- The **height** of a node = `1 + max(leftHeight, rightHeight)`.
+- We use DFS to compute the height of each subtree and update a global `ans`
+  (maximum diameter found so far).
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    int ans = 0; // Stores the maximum diameter found so far
+
+    // Helper function to compute height and update diameter
+    int height(TreeNode* root) {
+        if (root == nullptr)
+            return 0;
+
+        int left = height(root->left);
+        int right = height(root->right);
+
+        // Update the global diameter (max edges between two leaves)
+        ans = max(ans, left + right);
+
+        // Return height of the current node
+        return max(left, right) + 1;
+    }
+
+    // Main function
+    int diameterOfBinaryTree(TreeNode* root) {
+        height(root);
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+       1
+      / \
+     2   3
+    / \     
+   4   5    
+
+→ height(4) = 1  
+→ height(5) = 1  
+→ at node 2 → left+right = 2 → ans = 2  
+→ at node 1 → left=2, right=1 → ans = max(2, 3) = 3  
+✅ Final Output = 3
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — Each node visited once.
+
+✅ Space Complexity:
+O(H) — Recursion stack (height of tree).
+
+✅ Concepts Used:
+- Depth-First Search (DFS)
+- Tree Height + Global Diameter Tracking
+--------------------------------------------------------------------

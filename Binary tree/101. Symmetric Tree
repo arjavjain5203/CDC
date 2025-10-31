@@ -1,0 +1,91 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Symmetric Tree (LeetCode #101)
+
+Given the root of a binary tree, check whether it is symmetric
+around its center (i.e., it is a mirror of itself).
+
+--------------------------------------------------------------------
+Example:
+Input:
+      1
+     / \
+    2   2
+   / \ / \
+  3  4 4  3
+
+Output: true
+
+--------------------------------------------------------------------
+✅ Approach: Recursive Mirror Check
+
+💡 **Idea:**
+A binary tree is symmetric if:
+1️⃣ The left and right subtrees are mirror images of each other.
+2️⃣ That means:
+   - left->val == right->val
+   - left->left mirrors right->right
+   - left->right mirrors right->left
+
+We perform a recursive DFS check for each pair of nodes.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    bool helper(TreeNode* left, TreeNode* right) {
+        // Both are null → symmetric
+        if (left == nullptr && right == nullptr)
+            return true;
+
+        // One is null, other not → not symmetric
+        if (left == nullptr || right == nullptr)
+            return false;
+
+        // Values differ → not symmetric
+        if (left->val != right->val)
+            return false;
+
+        // Recurse on mirrored children
+        return helper(left->left, right->right) &&
+               helper(left->right, right->left);
+    }
+
+    bool isSymmetric(TreeNode* root) {
+        // An empty tree is symmetric
+        if (!root) return true;
+
+        // Compare left and right subtrees
+        return helper(root->left, root->right);
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+      1
+     / \
+    2   2
+   / \ / \
+  3  4 4  3
+
+helper(2, 2) → equal  
+→ helper(3, 3) → equal → returns true  
+→ helper(4, 4) → equal → returns true  
+✅ Final Output = true
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — Each node is visited once.
+
+✅ Space Complexity:
+O(H) — Recursive call stack (H = height of tree).
+
+✅ Concepts Used:
+- Recursion
+- Mirror comparison (DFS)
+--------------------------------------------------------------------

@@ -1,0 +1,123 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Create Binary Tree from Descriptions (LeetCode #2196)
+
+You are given a 2D vector `descriptions` where each element is of the form:
+    [parent, child, isLeft]
+
+- `parent` → value of the parent node  
+- `child`  → value of the child node  
+- `isLeft` → 1 if the child is the left child, 0 if the child is the right child  
+
+Your task:  
+Build and return the **root node** of the binary tree described by these relations.
+
+--------------------------------------------------------------------
+Example:
+Input:
+descriptions = [[20,15,1],[20,17,0],[15,10,1]]
+
+Output:
+Tree:
+        20
+       /  \
+     15    17
+    /
+   10
+
+Explanation:
+20 → left = 15, right = 17  
+15 → left = 10
+
+--------------------------------------------------------------------
+✅ Approach: Hash Map + Child Tracking
+
+💡 **Idea:**
+1️⃣ Use an **unordered_map<int, TreeNode*>** to store and reuse all created nodes.  
+2️⃣ Use an **unordered_set<int> children** to record which nodes appear as children.  
+3️⃣ The **root** is the node that never appears in `children`.
+
+--------------------------------------------------------------------
+✅ Steps:
+1. For each relation `[parent, child, isLeft]`:
+   - Create nodes if not already created.
+   - Link child to parent (left or right based on `isLeft`).
+   - Mark `child` in the `children` set.
+2. After processing, the root will be the node in `mapping` not found in `children`.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_map<int, TreeNode*> mapping;  // store created nodes
+        unordered_set<int> children;            // track all child nodes
+
+        // Step 1: Create all connections
+        for (auto& desc : descriptions) {
+            int parent = desc[0];
+            int child = desc[1];
+            int isLeft = desc[2];
+
+            if (!mapping.count(parent))
+                mapping[parent] = new TreeNode(parent);
+            if (!mapping.count(child))
+                mapping[child] = new TreeNode(child);
+
+            if (isLeft)
+                mapping[parent]->left = mapping[child];
+            else
+                mapping[parent]->right = mapping[child];
+
+            children.insert(child);
+        }
+
+        // Step 2: Find the root (a node not appearing as a child)
+        for (auto& p : mapping) {
+            if (!children.count(p.first))
+                return p.second;
+        }
+
+        return nullptr;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+[[20,15,1],[20,17,0],[15,10,1]]
+
+After processing:
+mapping = {
+    20 -> Node(20)
+    15 -> Node(15)
+    17 -> Node(17)
+    10 -> Node(10)
+}
+
+connections:
+20.left = 15
+20.right = 17
+15.left = 10
+
+children = {15, 17, 10}
+
+→ Only node not in children = 20 → root
+
+✅ Output:
+Root = Node(20)
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — each description is processed once  
+✅ Space Complexity:
+O(N) — for map and set  
+✅ Concepts Used:
+- Hash Map for Node Caching
+- Set for Root Detection
+--------------------------------------------------------------------
+*/
