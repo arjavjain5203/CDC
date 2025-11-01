@@ -1,0 +1,109 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Design HashMap (LeetCode #706)
+
+Design a HashMap without using built-in hash table libraries.
+
+Implement the following operations:
+- put(key, value)
+- get(key)
+- remove(key)
+
+--------------------------------------------------------------------
+✅ Approach: Hashing with Separate Chaining
+
+💡 **Idea:**
+- Use an array (vector) of buckets.
+- Each bucket stores a list (vector) of key–value pairs.
+- Handle collisions using **separate chaining** (linked buckets).
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class MyHashMap {
+public:
+    vector<vector<pair<int,int>>> map;
+    int size = 100;  // number of buckets
+
+    MyHashMap() {
+        map.resize(size);
+    }
+
+    // Hash Function: simple modulo-based hash
+    int hashfunction(int key) {
+        return key % size;
+    }
+
+    // ✅ Insert or Update key-value pair
+    void put(int key, int value) {
+        int index = hashfunction(key);
+        for (auto &p : map[index]) {
+            if (p.first == key) {
+                p.second = value;  // update existing value
+                return;
+            }
+        }
+        // if not found, add new key-value pair
+        map[index].push_back({key, value});
+    }
+
+    // ✅ Retrieve value for a key
+    int get(int key) {
+        int index = hashfunction(key);
+        for (auto &p : map[index]) {
+            if (p.first == key) {
+                return p.second;
+            }
+        }
+        return -1;  // key not found
+    }
+
+    // ✅ Remove key-value pair
+    void remove(int key) {
+        int index = hashfunction(key);
+        for (auto it = map[index].begin(); it != map[index].end(); ++it) {
+            if (it->first == key) {
+                map[index].erase(it);
+                break;
+            }
+        }
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+MyHashMap* obj = new MyHashMap();
+obj->put(1, 10);
+obj->put(2, 20);
+obj->put(1, 15);
+obj->get(1);  // returns 15
+obj->remove(2);
+obj->get(2);  // returns -1
+
+Steps:
+1️⃣ put(1,10) → stored in bucket 1
+2️⃣ put(2,20) → stored in bucket 2
+3️⃣ put(1,15) → updates bucket 1 to (1,15)
+4️⃣ get(1) = 15
+5️⃣ remove(2) → deletes (2,20)
+6️⃣ get(2) = -1 (not found)
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- put() → O(n/b) on average (O(1) expected, assuming good hashing)
+- get() → O(n/b)
+- remove() → O(n/b)
+where b = number of buckets
+
+✅ Space Complexity:
+O(n) — storing up to n key–value pairs
+
+✅ Concepts Used:
+- Hashing
+- Separate Chaining
+- Vector of Pairs
+--------------------------------------------------------------------

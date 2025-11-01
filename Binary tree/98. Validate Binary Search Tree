@@ -1,0 +1,87 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Validate Binary Search Tree (LeetCode #98)
+
+Given the root of a binary tree, determine if it is a valid **Binary Search Tree (BST)**.
+
+A **valid BST** satisfies:
+- Every node's left subtree contains only nodes with keys **less than** the node's key.
+- Every node's right subtree contains only nodes with keys **greater than** the node's key.
+- Both left and right subtrees must also be BSTs.
+
+--------------------------------------------------------------------
+Example:
+Input:
+        2
+       / \
+      1   3
+
+Output: true
+
+Explanation:
+Left < Root < Right → Valid BST.
+
+--------------------------------------------------------------------
+✅ Approach: Recursive Min–Max Bound Check
+
+💡 **Idea:**
+Use recursion with valid range `(min, max)` for each node:
+- Initially: `(-∞, +∞)`
+- For left child: valid range = `(min, node->val)`
+- For right child: valid range = `(node->val, max)`
+
+If at any point, `node->val` is not within `(min, max)`, it's not a BST.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    bool helper(TreeNode* root, long min, long max) {
+        if (root == nullptr)
+            return true;
+
+        // Node value must be strictly between min and max
+        if (root->val <= min || root->val >= max)
+            return false;
+
+        // Check left and right subtrees with updated ranges
+        return helper(root->left, min, root->val) &&
+               helper(root->right, root->val, max);
+    }
+
+    bool isValidBST(TreeNode* root) {
+        return helper(root, LONG_MIN, LONG_MAX);
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+        5
+       / \
+      1   4
+         / \
+        3   6
+
+Step-by-step:
+- Node 5: valid (−∞ < 5 < +∞)
+- Left 1: valid (−∞ < 1 < 5)
+- Right 4: invalid (5 < 4 < +∞) ❌
+
+Output: false
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(N) — each node is visited once.
+
+✅ Space Complexity:
+O(H) — recursion stack (H = height of the tree).
+
+✅ Concepts Used:
+- Recursion
+- Min–Max Range Validation
+--------------------------------------------------------------------

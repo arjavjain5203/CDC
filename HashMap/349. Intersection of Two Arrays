@@ -1,0 +1,73 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Intersection of Two Arrays (LeetCode #349)
+
+Given two integer arrays `nums1` and `nums2`, 
+return an array of their intersection.  
+Each element in the result must be **unique**, and you may return the result in **any order**.
+
+--------------------------------------------------------------------
+✅ Approach: Using Hash Set (unordered_set)
+
+💡 **Idea:**
+- Store all elements of `nums1` in an unordered_set for quick lookup.
+- Iterate through `nums2`:
+  - If an element exists in the set → it’s part of the intersection.
+  - Add it to the result and remove it from the set to ensure uniqueness.
+- Return the result vector containing the intersection elements.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <unordered_set>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> st(nums1.begin(), nums1.end());  // store nums1 elements
+        vector<int> result;
+
+        for (int num : nums2) {
+            if (st.find(num) != st.end()) {  // if num is common
+                result.push_back(num);
+                st.erase(num);               // remove to prevent duplicates
+            }
+        }
+
+        return result;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+nums1 = [1, 2, 2, 1]
+nums2 = [2, 2]
+
+Step-by-step:
+- Insert nums1 → set = {1, 2}
+- Iterate nums2:
+  - num = 2 → found in set → result = [2], erase 2 → set = {1}
+  - num = 2 → not found → skip
+
+Output: [2]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n + m)  
+- O(n) to insert elements of nums1  
+- O(m) to check and build intersection from nums2  
+
+✅ Space Complexity:
+O(n) — for unordered_set storage
+
+✅ Concepts Used:
+- Hashing
+- Set Operations
+- Unique Element Filtering
+--------------------------------------------------------------------

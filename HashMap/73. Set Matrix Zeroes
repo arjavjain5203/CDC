@@ -1,0 +1,91 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Set Matrix Zeroes (LeetCode #73)
+
+Given an `m x n` matrix, if an element is **0**, set its entire row and column to **0**.
+Do it **in place**.
+
+--------------------------------------------------------------------
+✅ Approach: Brute Force using Extra Space
+
+💡 **Idea:**
+- We first identify all the positions where the matrix has `0`.
+- Store these `(row, col)` positions in a vector of pairs.
+- Then, for each stored zero position:
+  - Set the entire **row** and **column** to 0.
+- This ensures that all affected rows and columns are updated correctly.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        vector<pair<int,int>> zeros;
+        int m = matrix.size();
+        int n = matrix[0].size();
+
+        // Step 1️⃣: Record all zero positions
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                if(matrix[i][j] == 0) {
+                    zeros.push_back({i, j});
+                }
+            }
+        }
+
+        // Step 2️⃣: Set corresponding rows and columns to zero
+        for(auto p : zeros) {
+            int i = p.first;
+            int j = p.second;
+            
+            // Set the entire row to zero
+            for(int col = 0; col < n; col++) {
+                matrix[i][col] = 0;
+            }
+
+            // Set the entire column to zero
+            for(int row = 0; row < m; row++) {
+                matrix[row][j] = 0;
+            }
+        }
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+matrix = [
+  [1, 2, 3],
+  [4, 0, 6],
+  [7, 8, 9]
+]
+
+Step 1️⃣: Find zeros → (1,1)
+Step 2️⃣:
+- Set row 1 → [0, 0, 0]
+- Set column 1 → [2nd col → 0 in all rows]
+
+Output:
+[
+  [1, 0, 3],
+  [0, 0, 0],
+  [7, 0, 9]
+]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(m * n * (m + n))  
+→ Each zero may cause a full row & column traversal.
+
+✅ Space Complexity:
+O(k) — where k = number of zeros (to store their positions)
+
+✅ Concepts Used:
+- Matrix Traversal
+- Auxiliary Space for Index Tracking
+--------------------------------------------------------------------
+*/

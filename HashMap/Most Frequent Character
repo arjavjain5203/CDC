@@ -1,0 +1,86 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Maximum Occurring Character (GFG / Coding Interview)
+
+Given a string `s`, find the character that appears the most number of times.  
+If multiple characters have the same frequency, return the one that appears first in **lexicographical order**.
+
+--------------------------------------------------------------------
+✅ Approach: Frequency Counting using Array
+
+💡 **Idea:**
+- Maintain a frequency array of size 26 (for lowercase English letters).
+- Iterate through the string and count occurrences.
+- Traverse the frequency array to find the character with the maximum frequency.
+- If multiple characters have the same frequency, return the smallest lexicographically.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    char getMaxOccuringChar(string& s) {
+        vector<int> count(26, 0); // frequency array
+
+        // ✅ Step 1: Count frequencies
+        for (char c : s) {
+            count[c - 'a']++;
+        }
+
+        int maxFreq = -1;
+        char res = 0;
+
+        // ✅ Step 2: Find character with highest frequency
+        for (int i = 0; i < 26; i++) {
+            if (count[i] > maxFreq) {
+                maxFreq = count[i];
+                res = 'a' + i;
+            }
+        }
+
+        return res;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+s = "testsample"
+
+Frequency Table:
+t → 2  
+e → 2  
+s → 2  
+a → 1  
+m → 1  
+p → 1  
+l → 1  
+
+Output: 'e'
+
+Explanation:
+Characters 't', 'e', and 's' appear 2 times,  
+but 'e' comes first lexicographically.
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n + 26) → O(n)
+  - Counting characters: O(n)
+  - Finding max: O(26)
+
+✅ Space Complexity:
+O(1)
+  - Fixed-size frequency array (26)
+
+✅ Concepts Used:
+- Arrays
+- Character Frequency
+- Lexicographical Comparison
+
+✅ Edge Cases:
+- All unique characters → returns smallest lexicographically
+- String with one character → returns that character
+--------------------------------------------------------------------
