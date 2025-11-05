@@ -1,0 +1,106 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Bulls and Cows (LeetCode #299)
+
+You are playing the "Bulls and Cows" game.
+
+You are given two strings `secret` and `guess`, both of equal length.
+
+- A **bull** is a digit that matches in **both value and position**.
+- A **cow** is a digit that exists in both strings but in **different positions**.
+
+You must return the result as "xAyB",  
+where x = bulls count, y = cows count.
+
+--------------------------------------------------------------------
+💡 Example:
+Input:  secret = "1807", guess = "7810"
+Output: "1A3B"
+
+Explanation:
+- Bulls: "8" (same position and value)
+- Cows:  "1", "0", "7" (correct digit, wrong position)
+
+--------------------------------------------------------------------
+✅ Approach: Two-Pass Counting Method
+
+1️⃣ **First Pass:**
+   - Identify **bulls** (exact matches).
+   - Mark those positions as used.
+   - Count occurrences of remaining digits from `secret`.
+
+2️⃣ **Second Pass:**
+   - For each unused position in `guess`,  
+     if the digit exists in the remaining `secret` counts → it's a **cow**.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        int n = secret.size();
+        int bulls = 0, cows = 0;
+
+        vector<bool> available(n, true);   // Track which positions are NOT bulls
+        unordered_map<char, int> freq;     // Frequency of non-bull chars in secret
+
+        // 🔹 Step 1: Count Bulls and record remaining digits
+        for (int i = 0; i < n; i++) {
+            if (secret[i] == guess[i]) {
+                bulls++;
+                available[i] = false; // mark as already matched
+            } else {
+                freq[secret[i]]++;
+            }
+        }
+
+        // 🔹 Step 2: Count Cows (digits present in wrong positions)
+        for (int i = 0; i < n; i++) {
+            if (available[i] && freq.find(guess[i]) != freq.end()) {
+                if (freq[guess[i]] > 0) {
+                    cows++;
+                    freq[guess[i]]--;
+                }
+            }
+        }
+
+        // 🔹 Format result
+        return to_string(bulls) + "A" + to_string(cows) + "B";
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+secret = "1123"
+guess  = "0111"
+
+Step 1:
+Compare indices:
+i=0: secret=1, guess=0 → no bull → freq[1]=1
+i=1: secret=1, guess=1 → bull++ (bull=1)
+i=2: secret=2, guess=1 → no bull → freq[2]=1
+i=3: secret=3, guess=1 → no bull → freq[3]=1
+
+freq = {1:1, 2:1, 3:1}
+
+Step 2:
+Check guess digits (excluding bulls):
+i=0: guess=0 → not found
+i=2: guess=1 → found in freq → cow++ (1)
+i=3: guess=1 → found in freq → cow++ (2)
+
+✅ Result → "1A1B"
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+✅ Space Complexity: O(1) (constant, since only digits 0–9 possible)
+
+✅ Key Concepts:
+- Hash Map Counting
+- Double Scan Technique
+--------------------------------------------------------------------
+*/

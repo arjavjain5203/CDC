@@ -1,0 +1,80 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Kth Largest Element in an Array (LeetCode #215)
+
+Given an integer array `nums` and an integer `k`, return the **kth largest element** in the array.
+
+⚡ Example:
+Input:  nums = [3,2,1,5,6,4], k = 2  
+Output: 5  
+Explanation: The 2nd largest element is 5.
+
+--------------------------------------------------------------------
+✅ Approach: Using Max-Heap (Priority Queue)
+
+💡 **Idea:**
+- The `priority_queue` in C++ is a **max-heap** by default.
+- Insert all elements of the array into the max-heap.
+- Then pop (k-1) elements from it.
+- The top element after (k-1) pops will be the **kth largest** element.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        // Step 1: Create a max-heap
+        priority_queue<int> pq;
+
+        // Step 2: Push all elements into the max-heap
+        for (int num : nums) {
+            pq.push(num);
+        }
+
+        // Step 3: Pop (k-1) elements
+        for (int i = 0; i < k - 1; i++) {
+            pq.pop();
+        }
+
+        // Step 4: The top element is the kth largest
+        return pq.top();
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+nums = [3,2,1,5,6,4], k = 2
+
+Step 1: Push all elements → Heap = [6,5,4,3,2,1]
+Step 2: Pop (k-1)=1 element → remove 6
+Step 3: Top of heap = 5 → 2nd largest element
+
+Output = 5
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- Building heap → O(n log n)
+- Popping (k-1) elements → O(k log n)
+⏱ Total: O((n + k) log n)
+
+✅ Space Complexity:
+O(n) — for storing elements in heap
+
+✅ Concepts Used:
+- Max Heap
+- Priority Queue (STL)
+
+--------------------------------------------------------------------
+💡 Alternate (Optimized) Approach:
+Use a **Min-Heap of size k** → O(n log k)
+Keep only k largest elements in the heap. The root will be the kth largest.
+--------------------------------------------------------------------
+*/

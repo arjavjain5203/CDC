@@ -1,0 +1,87 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Longest Substring Without Repeating Characters (LeetCode #3)
+
+Given a string `s`, find the length of the longest substring 
+without repeating characters.
+
+--------------------------------------------------------------------
+💡 Example:
+Input:  s = "abcabcbb"
+Output: 3  
+Explanation: The longest substring without repeating characters is "abc".
+
+--------------------------------------------------------------------
+✅ Approach: Sliding Window + HashMap
+
+🔹 Use a **sliding window** to maintain a substring without duplicates.  
+🔹 Maintain:
+   - `start`: left boundary of the current window
+   - `map`: stores the **last index** of each character
+   - `size`: length of the longest valid window found so far
+
+🔹 Algorithm:
+1️⃣ Traverse each character `s[i]`.
+2️⃣ If the character has been seen **inside the current window**:
+    - Move the start pointer to **(last_index + 1)**.
+3️⃣ Update the character’s latest position in the map.
+4️⃣ Compute the window size `i - start + 1` and update `size` if larger.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        if (s.size() <= 1)
+            return s.size();
+
+        unordered_map<char, int> mp;  // stores last index of each character
+        int start = 0;                // start of current window
+        int maxLen = 0;               // length of longest substring
+
+        for (int i = 0; i < s.size(); i++) {
+            // If character repeats within current window, move start
+            if (mp.find(s[i]) != mp.end() && mp[s[i]] >= start) {
+                start = mp[s[i]] + 1;
+            }
+
+            // Update last occurrence of current character
+            mp[s[i]] = i;
+
+            // Update maximum window size
+            maxLen = max(maxLen, i - start + 1);
+        }
+
+        return maxLen;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+s = "pwwkew"
+
+i | s[i] | start | mp                 | window        | maxLen
+--|------|--------|-------------------|----------------|--------
+0 |  p   |   0    | {p:0}             | "p"            | 1
+1 |  w   |   0    | {p:0, w:1}        | "pw"           | 2
+2 |  w   |   2    | {p:0, w:2}        | "w"            | 2
+3 |  k   |   2    | {p:0, w:2, k:3}   | "wk"           | 2
+4 |  e   |   2    | {p:0, w:2, k:3, e:4} | "wke"       | 3
+5 |  w   |   3    | {p:0, w:5, k:3, e:4} | "kew"       | 3
+
+✅ Final Answer → 3
+
+--------------------------------------------------------------------
+✅ Time Complexity: O(n)
+✅ Space Complexity: O(k)
+Where k = number of unique characters (max 26 for lowercase letters or 128 for ASCII)
+
+✅ Key Concepts:
+- Sliding Window
+- HashMap (for last index tracking)
+- Two Pointers (window expansion and contraction)
+--------------------------------------------------------------------
+*/

@@ -1,0 +1,96 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Check if Binary Tree is a Heap (GFG)
+
+You are given a binary tree. The task is to check whether it satisfies the 
+following properties of a **Max-Heap**:
+
+1️⃣ **Complete Binary Tree (CBT)**:  
+   All levels are completely filled except possibly the last, 
+   which is filled from left to right.
+
+2️⃣ **Heap Order Property**:  
+   Every node's value is **greater than or equal** to its children’s values.
+
+--------------------------------------------------------------------
+✅ Approach:
+1. **Count Nodes** → Recursively count total nodes in the tree.
+2. **Check Completeness and Heap Property** → 
+   - Index each node as if it were in an array (like heap indexing).
+   - For a node at index `i`,  
+     → left child index = `2*i + 1`  
+     → right child index = `2*i + 2`  
+   - A tree is complete if all node indices are `< total_nodes`.
+   - Additionally, check that each node’s value is >= its children’s.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+class Solution {
+  public:
+    // Count total number of nodes
+    int count(Node* tree) {
+        if (!tree) return 0;
+        return 1 + count(tree->left) + count(tree->right);
+    }
+
+    // Check completeness + heap property simultaneously
+    bool check(Node* root, int i, int total) {
+        if (!root) return true;
+
+        // Index exceeds total nodes => not complete
+        if (i >= total) return false;
+
+        // Check heap property for children
+        if (root->left && root->data < root->left->data) return false;
+        if (root->right && root->data < root->right->data) return false;
+
+        // Recurse for left and right subtrees
+        return check(root->left, 2 * i + 1, total) &&
+               check(root->right, 2 * i + 2, total);
+    }
+
+    // Main function
+    bool isHeap(Node* tree) {
+        int total = count(tree);
+        return check(tree, 0, total);
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input Tree:
+        10
+       /  \
+      9    8
+     / \  /
+    7  6 5
+
+Node count = 6
+
+Index Representation:
+0:10, 1:9, 2:8, 3:7, 4:6, 5:5
+
+- Each index < total_nodes ✅
+- Parent >= children ✅
+
+✅ Output: true  (It is a valid Max-Heap)
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+O(n) — each node is visited once.
+
+✅ Space Complexity:
+O(h) — recursion stack, where h = height of the tree.
+
+✅ Concepts Used:
+- Recursion
+- Binary Tree Indexing (like heap)
+- Complete Binary Tree check
+- Heap property validation
+
+--------------------------------------------------------------------
+*/

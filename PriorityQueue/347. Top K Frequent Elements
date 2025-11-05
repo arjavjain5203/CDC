@@ -1,0 +1,96 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Top K Frequent Elements (LeetCode #347)
+
+Given an integer array `nums` and an integer `k`, return the `k` most frequent elements.
+You may return the answer in any order.
+
+⚡ Example:
+Input: nums = [1,1,1,2,2,3], k = 2  
+Output: [1,2]  
+Explanation: 1 appears 3 times, 2 appears 2 times.
+
+--------------------------------------------------------------------
+✅ Approach: Frequency Counting + Min-Heap (Priority Queue)
+
+💡 **Idea:**
+1. Use a hash map (`unordered_map`) to count the frequency of each element.
+2. Use a **min-heap** of size `k` to keep track of the top k frequent elements:
+   - Each heap node stores `{frequency, element}`.
+   - If the heap exceeds size `k`, pop the smallest frequency element.
+3. Finally, extract all elements from the heap for the result.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // Step 1: Count frequencies
+        unordered_map<int, int> freq;
+        for (int num : nums) {
+            freq[num]++;
+        }
+
+        // Step 2: Min-heap based on frequency
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+        // Step 3: Maintain heap of size k
+        for (auto &p : freq) {
+            pq.push({p.second, p.first});  // (frequency, element)
+            if (pq.size() > k)
+                pq.pop(); // remove smallest frequency
+        }
+
+        // Step 4: Extract result
+        vector<int> ans;
+        while (!pq.empty()) {
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+
+        return ans;
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+nums = [1,1,1,2,2,3], k = 2
+
+Step 1️⃣: Frequency Map → {1:3, 2:2, 3:1}
+
+Step 2️⃣: Push into Min-Heap (by frequency)
+- Push (3,1)
+- Push (2,2)
+- Push (1,3) → size > k → pop (1,3)
+
+Heap contains → [(2,2), (3,1)]
+
+Step 3️⃣: Extract elements → [2, 1]
+
+✅ Output: [2, 1]  (order may vary)
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- Frequency map creation → O(n)
+- Heap operations → O(n log k)
+- Extraction → O(k log k)
+✅ Overall: O(n log k)
+
+✅ Space Complexity:
+O(n) for hash map + O(k) for heap
+
+✅ Concepts Used:
+- Hash Map
+- Min-Heap (Priority Queue)
+- Frequency Counting
+
+--------------------------------------------------------------------
+*/

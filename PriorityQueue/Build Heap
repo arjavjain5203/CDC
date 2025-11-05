@@ -1,0 +1,85 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Build Max-Heap from an Array
+
+You are given an array `arr` of size `n`.
+Your task is to convert it into a **Max-Heap**.
+
+A Max-Heap is a binary tree where:
+- Each parent node is **greater than or equal** to its children.
+- The tree is complete (all levels filled except possibly the last).
+
+--------------------------------------------------------------------
+💡 Example:
+Input:  arr = [1, 3, 5, 4, 6, 13, 10]
+Output: [13, 6, 10, 4, 3, 1, 5]   (one possible max-heap)
+
+--------------------------------------------------------------------
+✅ Approach: Using Max-Priority Queue
+
+🔹 The STL `priority_queue` in C++ is a **max-heap** by default.  
+🔹 So we can:
+1️⃣ Insert all elements of `arr` into a `priority_queue<int>`.  
+2️⃣ Pop all elements from the queue — this gives elements in descending order.
+
+⚠️ Note: This approach gives a *sorted* array in descending order, 
+which represents the elements of a max-heap (but not the actual heap structure in array form).
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h> 
+using namespace std;
+
+vector<int> buildHeap(vector<int> arr, int n)
+{	
+    // Step 1: Create a max-heap using priority_queue
+	priority_queue<int> pq;
+
+    // Step 2: Insert all array elements into the heap
+	for(int x : arr) {
+		pq.push(x);
+	}
+
+    // Step 3: Extract elements from heap (in descending order)
+	vector<int> ans;
+	while(!pq.empty()) {
+		ans.push_back(pq.top());
+		pq.pop();
+	}
+
+	return ans;
+}
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+Input: arr = [4, 10, 3, 5, 1]
+
+Step 1 → Push all elements into priority_queue  
+pq = [10, 5, 3, 4, 1]  (internally maintained as a max-heap)
+
+Step 2 → Pop elements one by one:
+→ 10, 5, 4, 3, 1
+
+Output: [10, 5, 4, 3, 1]
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- Insertion into heap: O(n log n)
+- Extraction: O(n log n)
+→ Overall: **O(n log n)**
+
+✅ Space Complexity:
+O(n) — for the priority queue
+
+✅ Concepts Used:
+- Heap / Priority Queue
+- STL Containers (priority_queue)
+--------------------------------------------------------------------
+💡 Note:
+If the task expects the **array representation of a valid heap** (not just sorted descending),
+you should use **heapify** approach (O(n)) instead of priority queue.
+--------------------------------------------------------------------
+*/

@@ -1,0 +1,85 @@
+/**
+--------------------------------------------------------------------
+✅ Problem: Kth Smallest Element in an Array (GFG / LeetCode Variant)
+
+Given an array `arr[]` and an integer `k`, find the **kth smallest element** in the array.
+
+⚡ Example:
+Input: arr = [7, 10, 4, 3, 20, 15], k = 3  
+Output: 7  
+Explanation: The 3rd smallest element is 7.
+
+--------------------------------------------------------------------
+✅ Approach: Using Max-Heap of Size K
+
+💡 **Idea:**
+- Maintain a **max-heap** (priority_queue in C++) of size `k`.
+- Push elements one by one into the heap.
+- If the heap size exceeds `k`, remove the largest element (top of heap).
+- After processing all elements, the **top of the heap** will be the `kth smallest` element.
+
+Why max-heap?
+- Because we always want to keep track of the smallest `k` elements.
+- The largest among them (top of max-heap) is the `kth smallest`.
+
+--------------------------------------------------------------------
+✅ Implementation:
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int kthSmallest(vector<int>& arr, int k) {
+        // Step 1: Create a max-heap
+        priority_queue<int> pq;
+
+        // Step 2: Traverse the array
+        for (int i = 0; i < arr.size(); i++) {
+            // Push current element
+            pq.push(arr[i]);
+
+            // Step 3: If heap size > k, remove the largest element
+            if (pq.size() > k) {
+                pq.pop();
+            }
+        }
+
+        // Step 4: The top element is the kth smallest
+        return pq.top();
+    }
+};
+
+/**
+--------------------------------------------------------------------
+✅ Dry Run Example:
+
+Input:
+arr = [7, 10, 4, 3, 20, 15], k = 3
+
+Steps:
+1️⃣ Push 7 → heap = [7]
+2️⃣ Push 10 → heap = [10, 7]
+3️⃣ Push 4 → heap = [10, 7, 4]
+   (size == k)
+4️⃣ Push 3 → heap = [10, 7, 4, 3] → pop(10) → heap = [7, 3, 4]
+5️⃣ Push 20 → heap = [20, 7, 4, 3] → pop(20) → heap = [7, 3, 4]
+6️⃣ Push 15 → heap = [15, 7, 4, 3] → pop(15) → heap = [7, 3, 4]
+
+✅ Top = 7 → 3rd smallest element
+
+--------------------------------------------------------------------
+✅ Time Complexity:
+- Insertion into heap → O(log k)
+- For n elements → O(n log k)
+
+✅ Space Complexity:
+O(k) — heap stores at most k elements
+
+✅ Concepts Used:
+- Heap (Priority Queue)
+- Max-Heap Logic for kth Smallest
+
+--------------------------------------------------------------------
+*/
