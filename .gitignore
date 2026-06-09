@@ -1,0 +1,19 @@
+# Virtual environments
+**/venv/
+**/.venv/
+venv/
+.venv/
+
+# Ignore compiled binaries in CodeForces (files without extension)
+# By default, ignore everything in CodeForces except source files
+CodeForces/*
+!CodeForces/*.cpp
+!CodeForces/*.py
+
+# Ignore other files in CodeForces that are inputs/outputs/temporary
+CodeForces/input.txt
+CodeForces/output.txt
+
+# Python cache files
+**/__pycache__/
+*.pyc
