@@ -2,9 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build and run with file",
+            "label": "CP Run",
             "type": "shell",
-            "command": "g++ -std=c++17 -O2 -Wall \"${file}\" -o \"${fileDirname}/${fileBasenameNoExtension}\" && \"${fileDirname}/${fileBasenameNoExtension}\" < input.txt > output.txt",
+            "command": "g++ -std=c++17 -O2 -Wall \"${file}\" -o \"${fileBasenameNoExtension}\" && ./${fileBasenameNoExtension} < input.txt > output.txt",
             "options": {
                 "cwd": "${fileDirname}"
             },
@@ -15,56 +15,6 @@
             "problemMatcher": [
                 "$gcc"
             ]
-        },
-        {
-            "label": "debug cwd",
-            "type": "shell",
-            "command": "pwd && ls",
-            "options": {
-                "cwd": "${fileDirname}"
-            }
-        },
-        {
-            "type": "cppbuild",
-            "label": "C/C++: clang build active file",
-            "command": "/usr/bin/clang",
-            "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": "build",
-            "detail": "compiler: /usr/bin/clang"
-        },
-        {
-            "type": "cppbuild",
-            "label": "C/C++: clang build active file",
-            "command": "/usr/bin/clang",
-            "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": "build",
-            "detail": "compiler: /usr/bin/clang"
         }
     ]
 }
